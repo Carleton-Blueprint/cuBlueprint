@@ -72,6 +72,12 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    projects: Project;
+    students: Student;
+    events: Event;
+    applications: Application;
+    jobs: Job;
+    teams: Team;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -81,13 +87,29 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    projects: {
+      team: 'students';
+    };
+    jobs: {
+      applications: 'applications';
+    };
+    teams: {
+      team: 'students';
+    };
+  };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    students: StudentsSelect<false> | StudentsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    applications: ApplicationsSelect<false> | ApplicationsSelect<true>;
+    jobs: JobsSelect<false> | JobsSelect<true>;
+    teams: TeamsSelect<false> | TeamsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -103,10 +125,14 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    homePage: HomePage;
+    projectsPage: ProjectsPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    homePage: HomePageSelect<false> | HomePageSelect<true>;
+    projectsPage: ProjectsPageSelect<false> | ProjectsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -165,27 +191,28 @@ export interface Page {
       };
       [k: string]: unknown;
     } | null;
+    title?: string | null;
+    subtitle?: string | null;
     links?:
       | {
           link: {
             type?: ('reference' | 'custom') | null;
             newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: string | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: string | Post;
-                } | null);
+            reference?: {
+              relationTo: 'pages';
+              value: string | Page;
+            } | null;
             url?: string | null;
             label: string;
             /**
              * Choose how the link should be rendered.
              */
-            appearance?: ('default' | 'outline') | null;
+            appearance?: ('default' | 'outline' | 'blueprintFilled') | null;
           };
+          /**
+           * This media can be used to show an image under the link.
+           */
+          media?: (string | null) | Media;
           id?: string | null;
         }[]
       | null;
@@ -201,53 +228,6 @@ export interface Page {
     description?: string | null;
   };
   publishedAt?: string | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: string;
-  title: string;
-  heroImage?: (string | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (string | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  authors?: (string | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -348,52 +328,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: string;
-  title: string;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  parent?: (string | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (string | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: string;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
@@ -417,15 +351,10 @@ export interface CallToActionBlock {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: string | Page;
+          } | null;
           url?: string | null;
           label: string;
           /**
@@ -433,6 +362,10 @@ export interface CallToActionBlock {
            */
           appearance?: ('default' | 'outline') | null;
         };
+        /**
+         * This media can be used to show an image under the link.
+         */
+        media?: (string | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -467,21 +400,16 @@ export interface ContentBlock {
         link?: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: string | Page;
+          } | null;
           url?: string | null;
           label: string;
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline') | null;
+          appearance?: ('default' | 'outline' | 'blueprintFilled') | null;
         };
         id?: string | null;
       }[]
@@ -533,6 +461,99 @@ export interface ArchiveBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  title: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  parent?: (string | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (string | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  heroImage?: (string | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (string | Post)[] | null;
+  categories?: (string | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (string | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -736,6 +757,216 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  companyName: string;
+  slug: string;
+  productName: string;
+  status: 'in-progress' | 'not-started' | 'completed';
+  startDate?: string | null;
+  endDate?: string | null;
+  description: string;
+  extendedDescription: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  url: string;
+  image?: (string | null) | Media;
+  team?: {
+    docs?: (string | Student)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "students".
+ */
+export interface Student {
+  id: string;
+  visibility?: boolean | null;
+  name: string;
+  email: string;
+  status: 'current' | 'past';
+  url: string;
+  image?: (string | null) | Media;
+  team?:
+    | (
+        | {
+            relationTo: 'projects';
+            value: string | Project;
+          }
+        | {
+            relationTo: 'teams';
+            value: string | Team;
+          }
+      )[]
+    | null;
+  position?: string | null;
+  /**
+   * Past teams and positions held by the student.
+   */
+  history?:
+    | {
+        team:
+          | {
+              relationTo: 'projects';
+              value: string | Project;
+            }
+          | {
+              relationTo: 'teams';
+              value: string | Team;
+            };
+        position: string;
+        startYear: string;
+        endYear?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams".
+ */
+export interface Team {
+  id: string;
+  name: string;
+  slug: string;
+  team?: {
+    docs?: (string | Student)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: string;
+  featured?: boolean | null;
+  visibility?: boolean | null;
+  title: string;
+  slug: string;
+  status: 'upcoming' | 'past';
+  venue?: string | null;
+  date?: string | null;
+  description: string;
+  extendedDescription: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applications".
+ */
+export interface Application {
+  id: string;
+  name: string;
+  email: string;
+  position: string | Job;
+  status: 'applied' | 'interviewed' | 'hired' | 'rejected';
+  resume: string | Media;
+  notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jobs".
+ */
+export interface Job {
+  id: string;
+  position: string;
+  /**
+   * Select the project this job is associated with.
+   */
+  team?:
+    | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'teams';
+        value: string | Team;
+      } | null);
+  status: 'open' | 'closed';
+  description: string;
+  extendedDescription: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  applications?: {
+    docs?: (string | Application)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -928,6 +1159,30 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'students';
+        value: string | Student;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: string | Event;
+      } | null)
+    | ({
+        relationTo: 'applications';
+        value: string | Application;
+      } | null)
+    | ({
+        relationTo: 'jobs';
+        value: string | Job;
+      } | null)
+    | ({
+        relationTo: 'teams';
+        value: string | Team;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1000,6 +1255,8 @@ export interface PagesSelect<T extends boolean = true> {
     | {
         type?: T;
         richText?: T;
+        title?: T;
+        subtitle?: T;
         links?:
           | T
           | {
@@ -1013,6 +1270,7 @@ export interface PagesSelect<T extends boolean = true> {
                     label?: T;
                     appearance?: T;
                   };
+              media?: T;
               id?: T;
             };
         media?: T;
@@ -1059,6 +1317,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
+        media?: T;
         id?: T;
       };
   id?: T;
@@ -1290,6 +1549,109 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  companyName?: T;
+  slug?: T;
+  productName?: T;
+  status?: T;
+  startDate?: T;
+  endDate?: T;
+  description?: T;
+  extendedDescription?: T;
+  url?: T;
+  image?: T;
+  team?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "students_select".
+ */
+export interface StudentsSelect<T extends boolean = true> {
+  visibility?: T;
+  name?: T;
+  email?: T;
+  status?: T;
+  url?: T;
+  image?: T;
+  team?: T;
+  position?: T;
+  history?:
+    | T
+    | {
+        team?: T;
+        position?: T;
+        startYear?: T;
+        endYear?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  featured?: T;
+  visibility?: T;
+  title?: T;
+  slug?: T;
+  status?: T;
+  venue?: T;
+  date?: T;
+  description?: T;
+  extendedDescription?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applications_select".
+ */
+export interface ApplicationsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  position?: T;
+  status?: T;
+  resume?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jobs_select".
+ */
+export interface JobsSelect<T extends boolean = true> {
+  position?: T;
+  team?: T;
+  status?: T;
+  description?: T;
+  extendedDescription?: T;
+  applications?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams_select".
+ */
+export interface TeamsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  team?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1552,20 +1914,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
+  logo: string | Media;
   navItems?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: string | Page;
+          } | null;
           url?: string | null;
           label: string;
         };
@@ -1581,20 +1939,16 @@ export interface Header {
  */
 export interface Footer {
   id: string;
+  logo: string | Media;
   navItems?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
+          reference?: {
+            relationTo: 'pages';
+            value: string | Page;
+          } | null;
           url?: string | null;
           label: string;
         };
@@ -1606,9 +1960,90 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homePage".
+ */
+export interface HomePage {
+  id: string;
+  /**
+   * The title of the hero section.
+   */
+  title: string;
+  subtitle: string;
+  button?: string | null;
+  buttonLink?: string | null;
+  /**
+   * Block heading.
+   */
+  projectsTitle: string;
+  /**
+   * Blueprinter character svg.
+   */
+  projectsBlueprinter?: (string | null) | Media;
+  /**
+   * Select up to 6 featured projects to display on the projects carousel.
+   */
+  featuredProjects?:
+    | {
+        project: string | Project;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Block heading.
+   */
+  newsAndEventsTitle: string;
+  /**
+   * Blueprinter character svg.
+   */
+  eventsBlueprinter?: (string | null) | Media;
+  /**
+   * Select up to 10 events or announcements to feature on the carousel.
+   */
+  newsAndEvents?:
+    | {
+        event: {
+          relationTo: 'events';
+          value: string | Event;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectsPage".
+ */
+export interface ProjectsPage {
+  id: string;
+  /**
+   * Select up from our database of projects to show on the Current Projects block.
+   */
+  currentProjects?:
+    | {
+        project: string | Project;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Select up from our database of projects to show on the Current Projects block.
+   */
+  pastProjects?:
+    | {
+        project: string | Project;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
   navItems?:
     | T
     | {
@@ -1632,6 +2067,7 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
   navItems?:
     | T
     | {
@@ -1644,6 +2080,56 @@ export interface FooterSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homePage_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  button?: T;
+  buttonLink?: T;
+  projectsTitle?: T;
+  projectsBlueprinter?: T;
+  featuredProjects?:
+    | T
+    | {
+        project?: T;
+        id?: T;
+      };
+  newsAndEventsTitle?: T;
+  eventsBlueprinter?: T;
+  newsAndEvents?:
+    | T
+    | {
+        event?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectsPage_select".
+ */
+export interface ProjectsPageSelect<T extends boolean = true> {
+  currentProjects?:
+    | T
+    | {
+        project?: T;
+        id?: T;
+      };
+  pastProjects?:
+    | T
+    | {
+        project?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -1666,6 +2152,14 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: string | Project;
+        } | null)
+      | ({
+          relationTo: 'events';
+          value: string | Event;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

@@ -18,6 +18,15 @@ export const linkGroup: LinkGroupType = ({ appearances, overrides = {} } = {}) =
       link({
         appearances,
       }),
+      {
+        name: 'media',
+        type: 'upload',
+        relationTo: 'media',
+        label: 'Media',
+        admin: {
+          description: 'This media can be used to show an image under the link.',
+        },
+      },
     ],
     admin: {
       initCollapsed: true,

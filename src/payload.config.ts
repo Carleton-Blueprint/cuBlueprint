@@ -16,12 +16,28 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Projects } from './collections/Projects'
+import { Students } from './collections/Students'
+import { Events } from './collections/Events'
+import { Applications } from './collections/Applications'
+import { Jobs } from './collections/Jobs'
+import { Teams } from './collections/Teams'
+import { HomePage } from './globals/HomePage/config'
+import { ProjectsPage } from './globals/ProjectsPage/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
+    autoLogin:
+      process.env.NODE_ENV === 'development'
+        ? {
+            email: 'omark212378@gmail.com',
+            password: 'pyWwig-sywwuc-6fovxu',
+            prefillOnly: true,
+          }
+        : false,
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below.
@@ -62,9 +78,21 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    Projects,
+    Students,
+    Events,
+    Applications,
+    Jobs,
+    Teams,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, HomePage, ProjectsPage],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

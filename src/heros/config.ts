@@ -53,6 +53,21 @@ export const hero: Field = {
       }),
       label: false,
     },
+    {
+      name: 'title',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+      },
+      required: true,
+    },
+    {
+      name: 'subtitle',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+      },
+    },
     linkGroup({
       overrides: {
         maxRows: 2,

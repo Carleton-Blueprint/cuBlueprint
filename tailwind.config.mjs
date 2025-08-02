@@ -9,7 +9,7 @@ const config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  darkMode: ['selector', '[data-theme="dark"]'],
+  darkMode: ['selector', '[data-theme="dark"]', '.dark'],
   plugins: [tailwindcssAnimate, typography],
   prefix: '',
   safelist: [
@@ -30,12 +30,12 @@ const config = {
     container: {
       center: true,
       padding: {
-        '2xl': '2rem',
-        DEFAULT: '1rem',
-        lg: '2rem',
-        md: '2rem',
-        sm: '1rem',
-        xl: '2rem',
+        // '2xl': '2rem',
+        DEFAULT: '2rem',
+        // lg: '2rem',
+        // md: '2rem',
+        // sm: '1rem',
+        // xl: '2rem',
       },
       screens: {
         '2xl': '86rem',
@@ -148,6 +148,10 @@ const config = {
       }),
     },
   },
+  corePlugins: {
+    preflight: false,
+  },
+  blocklist: ['table'],
 }
 
 export default config

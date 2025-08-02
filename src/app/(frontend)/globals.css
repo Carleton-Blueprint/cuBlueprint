@@ -1,103 +1,133 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
 
-@layer base {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: unset;
-    font-weight: unset;
-  }
-
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 240 5% 96%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 240 6% 80%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.2rem;
-
-    --success: 196 52% 74%;
-    --warning: 34 89% 85%;
-    --error: 10 100% 86%;
-  }
-
-  [data-theme='dark'] {
-    --background: 0 0% 0%;
-    --foreground: 210 40% 98%;
-
-    --card: 0 0% 4%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 0, 0%, 15%, 0.8;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-
-    --success: 196 100% 14%;
-    --warning: 34 51% 25%;
-    --error: 10 39% 43%;
-  }
-}
-
-@layer base {
+/* @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
   }
+} */
+
+@import 'tailwindcss';
+/* @config '../../../tailwind.config.mjs'; */
+@plugin '@tailwindcss/typography';
+/* @plugin 'tailwindcss/animate'; */
+
+@theme {
+  --color-blueprint: #006fdc;
+  --color-blueprint-foreground: #f0f0f0;
+
+  --color-blueprint-dark: #0a1e3a;
+  --color-blueprint-dark-foreground: #d9d9d9;
+
+  --color-blueprint-50: #e7f2fe;
+  --color-blueprint-100: #aed9ff;
+  --color-blueprint-200: #7dbdff;
+  --color-blueprint-300: #4aa3ff;
+  --color-blueprint-400: #1a89ff;
+  --color-blueprint-500: #006fdc;
+  --color-blueprint-600: #0056b4;
+  --color-blueprint-700: #003e82;
+  --color-blueprint-800: #002551;
+  --color-blueprint-900: #000d21;
 }
 
-html {
-  opacity: 0;
+@layer utilities {
+  .container {
+    @apply w-full mr-auto ml-auto pl-8 pr-8; /* 2rem = 32px */
+  }
+
+  .containerLeft {
+    @apply w-full mx-auto pl-8; /* 2rem = 32px */
+  }
+
+  .containerWidth {
+    @apply w-full mx-auto px-8; /* 2rem = 32px */
+  }
+
+  @media (min-width: 40rem) {
+    .container {
+      max-width: 40rem;
+      @apply px-4; /* 1rem = 16px */
+    }
+    .containerLeft {
+      max-width: 40rem;
+      @apply pl-4; /* 1rem = 16px */
+    }
+    .containerWidth {
+      max-width: 40rem;
+      @apply px-4; /* 1rem = 16px */
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .container {
+      max-width: 48rem;
+      @apply px-8; /* 2rem */
+    }
+    .containerLeft {
+      max-width: 48rem;
+      @apply pl-8; /* 2rem */
+    }
+    .containerWidth {
+      max-width: 150rem;
+      @apply px-8; /* 2rem */
+    }
+  }
+
+  @media (min-width: 59rem) {
+    .container {
+      max-width: 59rem;
+    }
+    .containerLeft {
+      max-width: 59rem;
+      @apply pl-8; /* 2rem */
+    }
+    .containerWidth {
+      max-width: 150rem;
+      @apply px-8; /* 2rem */
+    }
+  }
+
+  @media (min-width: 62.5rem) {
+    .container {
+      max-width: 62.5rem;
+    }
+    .containerLeft {
+      max-width: 62.5rem;
+      @apply pl-8; /* 2rem */
+    }
+  }
+
+  @media (min-width: 78.5rem) {
+    .container {
+      max-width: 78.5rem;
+    }
+    .containerLeft {
+      max-width: 150rem;
+      @apply pl-8; /* 2rem */
+    }
+    .containerWidth {
+      max-width: 100rem;
+      @apply px-8; /* 2rem */
+    }
+  }
 }
 
-html[data-theme='dark'],
-html[data-theme='light'] {
-  opacity: initial;
+@layer theme {
+  /* .bg-blueprint {
+    background-color: var(--color-blueprint);
+  }
+  .bg-blueprint-foreground {
+    background-color: var(--color-blueprint-foreground);
+  }
+  .bg-blueprint-dark {
+    background-color: var(--color-blueprint-dark);
+  }
+  .bg-blueprint-dark-foreground {
+    background-color: var(--color-blueprint-dark-foreground);
+  } */
 }

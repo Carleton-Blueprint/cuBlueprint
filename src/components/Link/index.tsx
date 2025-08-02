@@ -2,11 +2,13 @@ import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 import React from 'react'
+import Image from 'next/image'
 
-import type { Page, Post } from '@/payload-types'
+import type { Media, Page, Post } from '@/payload-types'
 
 type CMSLinkType = {
-  appearance?: 'inline' | ButtonProps['variant']
+  appearance?: 'inline' | 'filled' | 'blueprintFilled' | ButtonProps['variant']
+  media?: string | Media | null
   children?: React.ReactNode
   className?: string
   label?: string | null
@@ -24,6 +26,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   const {
     type,
     appearance = 'inline',
+    media,
     children,
     className,
     label,
@@ -51,6 +54,56 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
       <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
         {label && label}
         {children && children}
+      </Link>
+    )
+  }
+
+  if (appearance === 'blueprintFilled') {
+    return (
+      <>
+        <Link
+          href={href}
+          target={`${newTab ? '_blank' : ''}`}
+          rel={`${newTab ? 'noopener noreferrer' : ''}`}
+          className={cn(
+            'group flex w-fit items-center font-bold text-blueprint transition-colors ease-in-out duration-300 hover:text-blueprint-300 -mb-[10px]',
+            className,
+          )}
+        >
+          <button className="w-[150px] self-start rounded-full bg-blueprint px-5 py-2 text-white duration-300 ease-in-out hover:bg-blueprint-300">
+            {label && label}
+            {children && children}
+          </button>
+        </Link>
+        {media && (
+          <Image
+            src={typeof media === 'string' ? media : media?.url || ''}
+            alt={label || ''}
+            priority
+            className=""
+            width={233}
+            height={142}
+          />
+        )}
+      </>
+    )
+  }
+
+  if (appearance === 'filled') {
+    return (
+      <Link
+        href={href}
+        target={`${newTab ? '_blank' : ''}`}
+        rel={`${newTab ? 'noopener noreferrer' : ''}`}
+        className={cn(
+          'group flex w-fit items-center font-bold text-blueprint transition-colors ease-in-out duration-300 hover:text-blueprint-300',
+          className,
+        )}
+      >
+        <button className="self-start rounded-full bg-blueprint px-5 py-2 text-white duration-300 ease-in-out hover:bg-blueprint-300">
+          {label && label}
+          {children && children}
+        </button>
       </Link>
     )
   }
