@@ -34,7 +34,7 @@ export default function SponsorsBlock({
 
   return (
     <BlockContainer
-      title="Our Sponsors"
+      title={title}
       padding="less"
       inner
       image={typeof image === 'string' ? image : image?.url || ''}
