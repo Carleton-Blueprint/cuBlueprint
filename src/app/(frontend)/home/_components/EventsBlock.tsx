@@ -8,36 +8,25 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import usePayload from '@/hooks/usePayload'
+import { Media } from '@/payload-types'
 
-export const revalidate = Number(process.env.REVALIDATION_INTERVAL) || 3600
+type HomeEventsProps = {
+  visibility?: boolean
+  title?: string | null
+  image?: string | Media | null
+  data?:
+    | {
+        event: string | any // Adjust type as needed
+        id?: string | null
+      }[]
+    | null
+}
 
-export default async function HomeEvents() {
-  const { payload } = await usePayload()
-  const res = await payload.find({
-    collection: 'events',
-    where: {
-      featured: {
-        equals: true,
-      },
-    },
-    limit: 10,
-    overrideAccess: false,
-    pagination: false,
-    sort: '-createdAt',
-  })
-  const resGlobal = await payload.findGlobal({
-    slug: 'homePage',
-    depth: 3,
-  })
-
-  const title = resGlobal.newsAndEventsTitle
-  const image = resGlobal.eventsBlueprinter
-
-  if (!resGlobal.newsAndEvents) {
-    console.warn('No news or events found in global settings')
+export default function HomeEvents({ visibility, title, image, data }: HomeEventsProps) {
+  if (!visibility || !data || data.length === 0 || !title) {
     return null
   }
-  const events = resGlobal.newsAndEvents.flatMap(
+  const events = data.flatMap(
     ({ event }) => (typeof event.value !== 'string' ? event.value : []), // Skip if event is of type string
   )
 

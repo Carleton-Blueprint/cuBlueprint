@@ -2,19 +2,51 @@ import BlockContainer from '@/components/BlockContainer'
 import SponsorCard from './SponsorCard'
 import ServerProLogo from '../_assets/server_pro_logo.svg'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { Media } from '@/payload-types'
 
-export default function SponsorsBlock() {
-  const sponsors = [
-    {
-      name: 'Server.pro',
-      description:
-        "Server.pro offers powerful game server hosting for serious gamers. Carleton Blueprint uses Server.pro's Virtual Private Servers for the development and testing of our projects.",
-      logo: ServerProLogo,
-    },
-  ]
+type SponsorsBlockProps = {
+  visibility: boolean
+  title: string | null | undefined
+  data:
+    | {
+        name: string
+        description: string
+        image?: (string | null) | Media
+        id?: string | null
+      }[]
+    | null
+    | undefined
+  roundedCorners?: 'none' | 'top' | 'bottom' | 'all' | null
+  image?: (string | null) | Media
+}
+
+export default function SponsorsBlock({
+  visibility,
+  title,
+  data,
+  image,
+  roundedCorners,
+}: SponsorsBlockProps) {
+  if (!visibility || !title || !data || data.length === 0) {
+    return null
+  }
+  const sponsors = data
 
   return (
-    <BlockContainer title="Our Sponsors" padding="less" inner margin="bottom">
+    <BlockContainer
+      title="Our Sponsors"
+      padding="less"
+      inner
+      image={typeof image === 'string' ? image : image?.url || ''}
+      margin="bottom"
+      roundedCorners={
+        roundedCorners === 'all'
+          ? true
+          : roundedCorners === 'none' || !roundedCorners
+            ? false
+            : roundedCorners
+      }
+    >
       <div className="hidden flex-col space-y-10 md:flex">
         {sponsors.map((sponsor) => (
           <SponsorCard key={sponsor.name} sponsor={sponsor} />
