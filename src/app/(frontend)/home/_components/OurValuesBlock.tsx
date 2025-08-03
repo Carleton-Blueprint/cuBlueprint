@@ -113,7 +113,7 @@ export default function OurValuesBlock({
 
   return (
     <BlockContainer
-      title="Our Values"
+      title={title}
       bg="light-blue"
       inner
       roundedCorners={
