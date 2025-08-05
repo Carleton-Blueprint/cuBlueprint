@@ -2,30 +2,28 @@ import BlockContainer from '@/components/BlockContainer'
 
 import Link from 'next/link'
 
-import usePayload from '@/hooks/usePayload'
 import ProjectsCarousel from './ProjectsCarousel'
+import { Media, Project } from '@/payload-types'
 
-export default async function ProjectsBlock() {
-  const { payload } = await usePayload()
-  const resGlobal = await payload.findGlobal({
-    slug: 'homePage',
-    depth: 3,
-  })
+type ProjectsBlockProps = {
+  visibility?: boolean
+  title?: string | null
+  image?: string | Media | null
+  data?:
+    | {
+        project: string | Project
+        id?: string | null
+      }[]
+    | null
+}
 
-  const title = resGlobal.projectsTitle
-  const image = resGlobal.projectsBlueprinter
-
-  if (!resGlobal.featuredProjects) {
-    console.warn('No featured projects found in global settings')
+export default function ProjectsBlock({ title, image, data, visibility }: ProjectsBlockProps) {
+  if (!visibility || !data || data.length === 0 || !title) {
     return null
   }
-  const featuredProjects = resGlobal.featuredProjects.flatMap(
+  const featuredProjects = data.flatMap(
     ({ project }) => (typeof project !== 'string' ? project : []), // Skip if project is of type string
   )
-  if (!featuredProjects || featuredProjects.length === 0) {
-    console.warn('No featured projects found')
-    return null
-  }
 
   return (
     <>

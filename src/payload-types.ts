@@ -1964,50 +1964,170 @@ export interface Footer {
  */
 export interface HomePage {
   id: string;
-  /**
-   * The title of the hero section.
-   */
-  title: string;
-  subtitle: string;
-  button?: string | null;
-  buttonLink?: string | null;
-  /**
-   * Block heading.
-   */
-  projectsTitle: string;
-  /**
-   * Blueprinter character svg.
-   */
-  projectsBlueprinter?: (string | null) | Media;
-  /**
-   * Select up to 6 featured projects to display on the projects carousel.
-   */
-  featuredProjects?:
-    | {
-        project: string | Project;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Block heading.
-   */
-  newsAndEventsTitle: string;
-  /**
-   * Blueprinter character svg.
-   */
-  eventsBlueprinter?: (string | null) | Media;
-  /**
-   * Select up to 10 events or announcements to feature on the carousel.
-   */
-  newsAndEvents?:
-    | {
-        event: {
-          relationTo: 'events';
-          value: string | Event;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  heroBlock: {
+    /**
+     * The title of the hero section.
+     */
+    title: string;
+    subtitle: string;
+    /**
+     * Image to display in the hero section.
+     */
+    heroImage: string | Media;
+    buttonText?: string | null;
+    buttonLink?: string | null;
+  };
+  aboutUsBlock: {
+    /**
+     * Toggle to show or hide the about us block.
+     */
+    visibility: boolean;
+    /**
+     * Block heading.
+     */
+    title?: string | null;
+    /**
+     * Text for the about us block.
+     */
+    text?: string | null;
+    /**
+     * Image for the about us block.
+     */
+    image?: (string | null) | Media;
+    /**
+     * Text for a link at the bottom of the block.
+     */
+    linkText?: string | null;
+    /**
+     * URL for the link at the bottom of the block.
+     */
+    linkUrl?: string | null;
+    /**
+     * Select the corners to round for the block.
+     */
+    roundedCorners?: ('none' | 'top' | 'bottom' | 'all') | null;
+  };
+  projectsBlock: {
+    /**
+     * Toggle to show or hide the featured projects block.
+     */
+    visibility: boolean;
+    /**
+     * Block heading.
+     */
+    projectsTitle?: string | null;
+    /**
+     * Blueprinter character svg.
+     */
+    projectsBlueprinter?: (string | null) | Media;
+    /**
+     * Select up to 6 featured projects to display on the projects carousel.
+     */
+    featuredProjects?:
+      | {
+          project: string | Project;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Select the corners to round for the block.
+     */
+    roundedCorners?: ('none' | 'top' | 'bottom' | 'all') | null;
+  };
+  eventsBlock: {
+    /**
+     * Toggle to show or hide the news and events block.
+     */
+    visibility: boolean;
+    /**
+     * Block heading.
+     */
+    newsAndEventsTitle?: string | null;
+    /**
+     * Blueprinter character svg.
+     */
+    eventsBlueprinter?: (string | null) | Media;
+    /**
+     * Select up to 10 events or announcements to feature on the carousel.
+     */
+    newsAndEvents?:
+      | {
+          event: {
+            relationTo: 'events';
+            value: string | Event;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Select the corners to round for the block.
+     */
+    roundedCorners?: ('none' | 'top' | 'bottom' | 'all') | null;
+  };
+  sponsorsBlock: {
+    /**
+     * Toggle to show or hide the sponsors block.
+     */
+    visibility: boolean;
+    /**
+     * Blueprinter character svg.
+     */
+    blueprinter?: (string | null) | Media;
+    /**
+     * Block heading.
+     */
+    sponsorsTitle?: string | null;
+    /**
+     * Add up to 6 sponsors to display in the sponsors block.
+     */
+    sponsors?:
+      | {
+          name: string;
+          description: string;
+          /**
+           * Blueprint image to place next to the value card.
+           */
+          image?: (string | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Select the corners to round for the block.
+     */
+    roundedCorners?: ('none' | 'top' | 'bottom' | 'all') | null;
+  };
+  ourValuesBlock: {
+    /**
+     * Toggle to show or hide the our values block.
+     */
+    visibility: boolean;
+    /**
+     * Block heading.
+     */
+    valuesTitle?: string | null;
+    /**
+     * Add up to 6 values to display in the our values block.
+     */
+    values?:
+      | {
+          value: string;
+          description: string;
+          /**
+           * Blueprint image to place next to the value card.
+           */
+          image?: (string | null) | Media;
+          /**
+           * Check to flip the card layout.
+           */
+          flip: boolean;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Select the corners to round for the block.
+     */
+    roundedCorners?: ('none' | 'top' | 'bottom' | 'all') | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2091,25 +2211,85 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "homePage_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
-  title?: T;
-  subtitle?: T;
-  button?: T;
-  buttonLink?: T;
-  projectsTitle?: T;
-  projectsBlueprinter?: T;
-  featuredProjects?:
+  heroBlock?:
     | T
     | {
-        project?: T;
-        id?: T;
+        title?: T;
+        subtitle?: T;
+        heroImage?: T;
+        buttonText?: T;
+        buttonLink?: T;
       };
-  newsAndEventsTitle?: T;
-  eventsBlueprinter?: T;
-  newsAndEvents?:
+  aboutUsBlock?:
     | T
     | {
-        event?: T;
-        id?: T;
+        visibility?: T;
+        title?: T;
+        text?: T;
+        image?: T;
+        linkText?: T;
+        linkUrl?: T;
+        roundedCorners?: T;
+      };
+  projectsBlock?:
+    | T
+    | {
+        visibility?: T;
+        projectsTitle?: T;
+        projectsBlueprinter?: T;
+        featuredProjects?:
+          | T
+          | {
+              project?: T;
+              id?: T;
+            };
+        roundedCorners?: T;
+      };
+  eventsBlock?:
+    | T
+    | {
+        visibility?: T;
+        newsAndEventsTitle?: T;
+        eventsBlueprinter?: T;
+        newsAndEvents?:
+          | T
+          | {
+              event?: T;
+              id?: T;
+            };
+        roundedCorners?: T;
+      };
+  sponsorsBlock?:
+    | T
+    | {
+        visibility?: T;
+        blueprinter?: T;
+        sponsorsTitle?: T;
+        sponsors?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              image?: T;
+              id?: T;
+            };
+        roundedCorners?: T;
+      };
+  ourValuesBlock?:
+    | T
+    | {
+        visibility?: T;
+        valuesTitle?: T;
+        values?:
+          | T
+          | {
+              value?: T;
+              description?: T;
+              image?: T;
+              flip?: T;
+              id?: T;
+            };
+        roundedCorners?: T;
       };
   updatedAt?: T;
   createdAt?: T;

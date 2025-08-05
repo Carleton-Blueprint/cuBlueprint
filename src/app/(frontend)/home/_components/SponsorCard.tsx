@@ -1,12 +1,12 @@
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Image from 'next/image';
-import { StaticImageData } from 'next/image';
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Media } from '@/payload-types'
+import Image from 'next/image'
 
 type SponsorDataType = {
-  name: string;
-  description: string;
-  logo: StaticImageData;
-};
+  name: string
+  description: string
+  image?: string | Media | null
+}
 
 export default function SponsorCard({ sponsor }: { sponsor: SponsorDataType }) {
   return (
@@ -20,8 +20,14 @@ export default function SponsorCard({ sponsor }: { sponsor: SponsorDataType }) {
         </CardContent>
       </div>
       <div className="flex h-1/3 justify-center md:w-1/4 md:justify-end">
-        <Image className="w-[175px] rounded-full" src={sponsor.logo} alt={`${sponsor.name} logo`} />
+        <Image
+          className="w-[175px] rounded-full"
+          src={typeof sponsor.image === 'string' ? sponsor.image : sponsor.image?.url || ''}
+          width={175}
+          height={175}
+          alt={`${sponsor.name} logo`}
+        />
       </div>
     </div>
-  );
+  )
 }
