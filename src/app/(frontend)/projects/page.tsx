@@ -23,7 +23,6 @@ export default async function Projects() {
       },
     },
   })
-  // const currentProjects = currentRes.docs
 
   const resGlobal = await payload.findGlobal({
     slug: 'projectsPage',
