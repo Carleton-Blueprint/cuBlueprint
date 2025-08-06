@@ -7,16 +7,53 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Project } from '@/payload-types'
+import { Media, Project } from '@/payload-types'
+import { cn } from '@/utilities/ui'
 import Image from 'next/image'
 import { FaGithub } from 'react-icons/fa'
 import { FaArrowCircleRight } from 'react-icons/fa'
 
-export default function ProjectCard({ data }: { data: Project }) {
+export default function ProjectCard({
+  data,
+  image,
+  imagePosition,
+}: {
+  data: Project
+  image?: string | Media | null
+  imagePosition?:
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'bottom'
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | null
+}) {
+  const imagePositionClasses = {
+    left: '-left-12',
+    right: '-right-20',
+    top: '-top-12',
+    bottom: '-bottom-12',
+    'top-left': '-top-12 -left-12',
+    'top-right': '-top-12 -right-12',
+    'bottom-left': '-bottom-12 -left-12',
+    'bottom-right': '-bottom-12 -right-12',
+  }
   return (
     <Card
-      className={`border-none bg-white flex w-full items-center justify-center rounded-[40px] shadow-[2px_6px_4px_0px_rgba(0,0,0,0.25)] md:h-auto`}
+      className={`border-none relative bg-white flex w-full items-center justify-center rounded-[40px] shadow-[2px_6px_4px_0px_rgba(0,0,0,0.25)] md:h-auto`}
     >
+      {image && (
+        <Image
+          src={typeof image === 'string' ? image : image?.url || ''}
+          alt={data.companyName}
+          width={125}
+          height={125}
+          className={cn('hidden md:block absolute', imagePositionClasses[imagePosition || 'left'])}
+        />
+      )}
       <Image
         src={typeof data.image === 'string' ? data.image : data.image?.url || ''}
         alt={data.companyName}
@@ -25,7 +62,7 @@ export default function ProjectCard({ data }: { data: Project }) {
         className={'ml-8 hidden h-[200px] w-auto md:block'}
       />
 
-      <div className="flex min-h-[320px] w-full flex-col justify-end md:min-h-full md:justify-between">
+      <div className="flex w-full flex-col justify-end md:min-h-full md:justify-between">
         <CardHeader className="flex flex-col items-start justify-between md:block md:items-center">
           <CardTitle className="text-4xl font-bold">{data.companyName}</CardTitle>
           <div className="flex w-full flex-row justify-between md:items-center md:pt-0">
@@ -41,21 +78,18 @@ export default function ProjectCard({ data }: { data: Project }) {
             />
           </div>
         </CardHeader>
-        <CardContent className={'text-md mb-5 hidden overflow-hidden md:block md:h-24'}>
+        <CardContent className={'text-md mb-5 mr-8 hidden overflow-hidden md:block md:h-24'}>
           <p className="line-clamp-4">{data.description}</p>
         </CardContent>
-        <CardFooter
-          className={'justify-end space-x-4 pb-4 text-xs md:justify-start md:pb-6 md:text-lg'}
-        >
-          {data.url && (
-            <LinkButton href={data.url} newTab={true} variant="icon">
-              {' '}
-              <FaGithub className="text-6xl text-black transition-colors duration-300 ease-in-out hover:text-blueprint md:text-5xl" />{' '}
-            </LinkButton>
-          )}
-          {data.id && (
-            <LinkButton href={'/projects/' + data.slug} newTab={true} variant="icon">
-              <FaArrowCircleRight className="text-6xl md:text-5xl" />
+        <CardFooter className={' space-x-4 pb-4 text-xl md:pb-6 md:text-lg'}>
+          {data.slug && (
+            <LinkButton
+              href={'/projects/' + data.slug}
+              variant="icon"
+              className="flex items-center space-x-2"
+            >
+              <h2 className="">Read more</h2>
+              <FaArrowCircleRight className="text-2xl" />
             </LinkButton>
           )}
         </CardFooter>

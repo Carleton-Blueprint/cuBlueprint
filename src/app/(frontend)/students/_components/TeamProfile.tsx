@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { Student } from '@/payload-types'
 
 function TeamProfileBase({ student, hover = false }: { student: Student; hover: boolean }) {
-  console.log(student.image)
   return (
     <div
       className={`flex flex-col items-center space-y-1 rounded-2xl py-3 text-center ${
@@ -12,7 +11,11 @@ function TeamProfileBase({ student, hover = false }: { student: Student; hover: 
     >
       <div className="mb-2 flex h-28 w-28 items-center overflow-hidden rounded-full border-2 border-white md:h-32 md:w-32">
         <Image
-          src={typeof student.image === 'string' ? student.image : student.image?.url || ''}
+          src={
+            typeof student.image === 'string'
+              ? student.image
+              : student.image?.url || '/media/bunny.svg'
+          }
           width={128}
           height={128}
           alt={'Picture of ' + (hover ? student.name : 'blueprint logo')}
@@ -26,7 +29,6 @@ function TeamProfileBase({ student, hover = false }: { student: Student; hover: 
 
 export default function TeamProfile({ student }: { student: string | Student }) {
   if (typeof student === 'string') {
-    console.log(student)
     return
   }
   if (student.url === '') {

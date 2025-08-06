@@ -1,11 +1,18 @@
-import { Project } from '@/payload-types'
+import { Media, Project } from '@/payload-types'
 import PastProjectCard from './PastProjectCard'
 import BlockContainer from '@/components/BlockContainer'
 
-export default async function PastProjects({ projects }: { projects: Project[] }) {
+type CurrentProjectsProps = {
+  title: string
+  image?: string | Media | null
+  projects: Project[]
+}
+
+export default async function PastProjects({ projects, title, image }: CurrentProjectsProps) {
   return (
     <BlockContainer
-      title="Past Projects"
+      title={title}
+      image={image ? image : undefined}
       roundedCorners="top"
       bg="dark-blue"
       padding="less"

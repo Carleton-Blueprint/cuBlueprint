@@ -65,14 +65,17 @@ export default function BlockContainer({
       >
         {title && (
           <div
-            className={cn('flex py-2 items-center text-5xl font-bold text-blueprint md:text-6xl', {
-              'text-3xl md:text-4xl': titleSize === 'sm',
-              'text-center': centered,
-              'text-white': bg === 'dark-blue' || bg === 'blueprint',
-              'mb-5': image,
-            })}
+            className={cn(
+              'flex space-x-4 py-2 items-center text-5xl font-bold text-blueprint md:text-6xl',
+              {
+                'text-3xl md:text-4xl': titleSize === 'sm',
+                'text-center': centered,
+                'text-white': bg === 'dark-blue' || bg === 'blueprint',
+                'mb-5': image,
+              },
+            )}
           >
-            {title}
+            <h1>{title}</h1>
             <div className="relative">
               {image && (
                 <>
@@ -81,7 +84,7 @@ export default function BlockContainer({
                     width={128}
                     height={128}
                     alt="Blueprint Logo"
-                    className="ml-6 md:ml-12 absolute -bottom-2 left-0 pointer-events-none"
+                    className="md:ml-12 absolute -bottom-2 left-0 pointer-events-none"
                   />
                   <span className="invisible">img</span>
                 </>
