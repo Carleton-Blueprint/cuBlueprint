@@ -82,7 +82,7 @@ export default function ProjectCard({
           <p className="line-clamp-4">{data.description}</p>
         </CardContent>
         <CardFooter className={' space-x-4 pb-4 text-xl md:pb-6 md:text-lg'}>
-          {data.id && (
+          {data.slug && (
             <LinkButton
               href={'/projects/' + data.slug}
               variant="icon"
