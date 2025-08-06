@@ -49,7 +49,6 @@ export default async function FullProjectPage({ params }: { params: Promise<{ sl
   if (!project) {
     return notFound()
   }
-  console.log('Project:', project)
   const students =
     project.team?.docs?.flatMap((member) => {
       if (typeof member === 'string') return []
