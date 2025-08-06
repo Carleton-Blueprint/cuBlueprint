@@ -78,14 +78,13 @@ export default function ProjectCard({
             />
           </div>
         </CardHeader>
-        <CardContent className={'text-md mb-5 hidden overflow-hidden md:block md:h-24'}>
+        <CardContent className={'text-md mb-5 mr-8 hidden overflow-hidden md:block md:h-24'}>
           <p className="line-clamp-4">{data.description}</p>
         </CardContent>
         <CardFooter className={' space-x-4 pb-4 text-xl md:pb-6 md:text-lg'}>
           {data.id && (
             <LinkButton
               href={'/projects/' + data.slug}
-              newTab={false}
               variant="icon"
               className="flex items-center space-x-2"
             >

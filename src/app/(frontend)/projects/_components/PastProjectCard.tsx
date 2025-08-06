@@ -2,11 +2,12 @@ import React from 'react'
 import Image from 'next/image'
 import { CardContent, CardTitle } from '@/components/ui/card'
 import { Project } from '@/payload-types'
+import Link from 'next/link'
 
 export default function PastProjectCard({ data }: { data: Project }) {
   return (
     <div className="relative">
-      <a href={'/projects/' + data.slug}>
+      <Link href={'/projects/' + data.slug}>
         <div className="flex max-h-[500px] min-h-[400px] flex-col items-center justify-end rounded-[40px] bg-gradient-to-t from-[#0170DC] to-[#6191BC] p-4 transition-all duration-150 ease-in-out hover:outline hover:outline-4 hover:outline-white">
           {data.image && (
             <div className="mb-4">
@@ -29,7 +30,7 @@ export default function PastProjectCard({ data }: { data: Project }) {
             </CardContent>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   )
 }
