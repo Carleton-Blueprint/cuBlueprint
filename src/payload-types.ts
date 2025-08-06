@@ -761,6 +761,10 @@ export interface Form {
  */
 export interface Project {
   id: string;
+  /**
+   * If checked, this project will be visible to the public. This will allow the project slug page to be accessible but you will need to add it to the ProjectsPage global to show it on the Projects page.
+   */
+  visibility?: boolean | null;
   companyName: string;
   slug: string;
   productName: string;
@@ -783,7 +787,7 @@ export interface Project {
     };
     [k: string]: unknown;
   };
-  url: string;
+  url?: string | null;
   image?: (string | null) | Media;
   team?: {
     docs?: (string | Student)[];
@@ -1555,6 +1559,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
+  visibility?: T;
   companyName?: T;
   slug?: T;
   productName?: T;
@@ -2017,24 +2022,45 @@ export interface HomePage {
  */
 export interface ProjectsPage {
   id: string;
+  currentProjectsBlock: {
+    title: string;
+    image?: (string | null) | Media;
+    /**
+     * Select up from our database of projects to show on the Current Projects block.
+     */
+    currentProjects?:
+      | {
+          project: string | Project;
+          /**
+           * Optional decorative image for the project card.
+           */
+          image?: (string | null) | Media;
+          /**
+           * Position of the image in the project card.
+           */
+          imagePosition?:
+            | ('top' | 'left' | 'right' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right')
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   /**
-   * Select up from our database of projects to show on the Current Projects block.
+   * This block is used to display past projects.
    */
-  currentProjects?:
-    | {
-        project: string | Project;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Select up from our database of projects to show on the Current Projects block.
-   */
-  pastProjects?:
-    | {
-        project: string | Project;
-        id?: string | null;
-      }[]
-    | null;
+  pastProjectsBlock: {
+    title: string;
+    image?: (string | null) | Media;
+    /**
+     * Select up from our database of projects to show on the Past Projects block.
+     */
+    pastProjects?:
+      | {
+          project: string | Project;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2120,17 +2146,31 @@ export interface HomePageSelect<T extends boolean = true> {
  * via the `definition` "projectsPage_select".
  */
 export interface ProjectsPageSelect<T extends boolean = true> {
-  currentProjects?:
+  currentProjectsBlock?:
     | T
     | {
-        project?: T;
-        id?: T;
+        title?: T;
+        image?: T;
+        currentProjects?:
+          | T
+          | {
+              project?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+            };
       };
-  pastProjects?:
+  pastProjectsBlock?:
     | T
     | {
-        project?: T;
-        id?: T;
+        title?: T;
+        image?: T;
+        pastProjects?:
+          | T
+          | {
+              project?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

@@ -19,6 +19,15 @@ export const Projects: CollectionConfig<'projects'> = {
   },
   fields: [
     {
+      name: 'visibility',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'If checked, this project will be visible to the public. This will allow the project slug page to be accessible but you will need to add it to the ProjectsPage global to show it on the Projects page.',
+      },
+    },
+    {
       name: 'companyName',
       type: 'text',
       required: true,
@@ -26,6 +35,7 @@ export const Projects: CollectionConfig<'projects'> = {
     {
       name: 'slug',
       type: 'text',
+      unique: true,
       required: true,
     },
     {
@@ -74,7 +84,6 @@ export const Projects: CollectionConfig<'projects'> = {
     {
       name: 'url',
       type: 'text',
-      required: true,
     },
     {
       name: 'image',
@@ -87,6 +96,7 @@ export const Projects: CollectionConfig<'projects'> = {
       collection: 'students',
       on: 'team',
       hasMany: true,
+      maxDepth: 2,
     },
   ],
   versions: {

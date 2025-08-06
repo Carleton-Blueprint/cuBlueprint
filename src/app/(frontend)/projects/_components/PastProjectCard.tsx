@@ -1,8 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import { CardContent, CardTitle } from '@/components/ui/card'
-import LinkButton from '@/components/LinkButton'
-import { FaGithub } from 'react-icons/fa'
 import { Project } from '@/payload-types'
 
 export default function PastProjectCard({ data }: { data: Project }) {
@@ -32,14 +30,6 @@ export default function PastProjectCard({ data }: { data: Project }) {
           </div>
         </div>
       </a>
-      <LinkButton
-        href={data.url ?? '/projects'}
-        newTab={true}
-        variant="icon"
-        className="absolute right-0 top-0 md:hidden"
-      >
-        <FaGithub className="h-[50px] w-[50px] text-white min-[376px]:h-[80px] min-[376px]:w-[80px] md:h-12 md:w-12" />
-      </LinkButton>
     </div>
   )
 }
