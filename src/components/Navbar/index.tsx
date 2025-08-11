@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import { useState } from 'react'
 import Image from 'next/image'
@@ -19,7 +18,6 @@ function MainLink() {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Navbar({ pages }: { pages: any[] }) {
-  const [open, setOpen] = useState(false)
   return (
     <div className="sticky top-0 z-[999] h-[80px]">
       <div className="flex h-[80px] justify-center bg-blueprint">
@@ -32,7 +30,7 @@ export default function Navbar({ pages }: { pages: any[] }) {
             ))}
           </div>
 
-          <NavbarMobile data={pages} open={open} setOpen={setOpen} />
+          <NavbarMobile data={pages} />
         </div>
       </div>
 

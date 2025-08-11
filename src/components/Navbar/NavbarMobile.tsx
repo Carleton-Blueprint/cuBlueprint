@@ -69,7 +69,8 @@ const styles = {
   },
 }
 
-export default function NavbarMobile({ data, open, setOpen }: PropType) {
+export default function NavbarMobile({ data }: PropType) {
+  const [open, setOpen] = useState(false)
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className={styles.sheetTrigger['md']}>
