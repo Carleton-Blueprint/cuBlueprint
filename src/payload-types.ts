@@ -127,12 +127,14 @@ export interface Config {
     footer: Footer;
     homePage: HomePage;
     projectsPage: ProjectsPage;
+    eventsPage: EventsPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     homePage: HomePageSelect<false> | HomePageSelect<true>;
     projectsPage: ProjectsPageSelect<false> | ProjectsPageSelect<true>;
+    eventsPage: EventsPageSelect<false> | EventsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -872,10 +874,16 @@ export interface Event {
   visibility?: boolean | null;
   title: string;
   slug: string;
-  status: 'upcoming' | 'past';
+  /**
+   * Status is auto-generated based on the event date.
+   */
+  status: string;
   venue?: string | null;
   date?: string | null;
   description: string;
+  /**
+   * This will appear on the full event page. Do not include event details that have already been added in other fields as those will be displayed separately.
+   */
   extendedDescription: {
     root: {
       type: string;
@@ -2186,6 +2194,26 @@ export interface ProjectsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "eventsPage".
+ */
+export interface EventsPage {
+  id: string;
+  title: string;
+  image?: (string | null) | Media;
+  /**
+   * Select up from our database of projects to show on the Current Projects block.
+   */
+  events?:
+    | {
+        event: string | Event;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2351,6 +2379,23 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               project?: T;
               id?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "eventsPage_select".
+ */
+export interface EventsPageSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  events?:
+    | T
+    | {
+        event?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

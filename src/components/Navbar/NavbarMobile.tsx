@@ -45,10 +45,13 @@
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@/components/ui/sheet'
 import { IoMenu } from 'react-icons/io5'
 import NavbarLinkItem from './NavbarLinkItem'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { cn } from '@/utilities/ui'
 
 type PropType = {
   data: any[]
+  open?: boolean
+  setOpen?: Dispatch<SetStateAction<boolean>>
 }
 
 /*
@@ -66,12 +69,11 @@ const styles = {
   },
 }
 
-export default function NavbarMobile({ data }: PropType) {
-  const [open, setOpen] = useState(false)
+export default function NavbarMobile({ data, open, setOpen }: PropType) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className={styles.sheetTrigger['md']}>
-        <IoMenu className="-pt-4 size-16 text-white" />
+        <IoMenu className="-pt-4 size-14 text-white" />
       </SheetTrigger>
       <SheetContent
         side={'top'}
