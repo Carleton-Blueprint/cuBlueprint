@@ -40,7 +40,7 @@ export const EventsPage: GlobalConfig = {
       admin: {
         initCollapsed: true,
         description:
-          'Select up from our database of projects to show on the Current Projects block.',
+          'Select from our database of events to show on the Current Events block.',
       },
     },
   ],
