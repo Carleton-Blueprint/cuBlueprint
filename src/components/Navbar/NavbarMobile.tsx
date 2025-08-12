@@ -49,7 +49,6 @@ import { Dispatch, SetStateAction, useState } from 'react'
 
 type PropType = {
   data: any[]
-  open?: boolean
 }
 
 /*
