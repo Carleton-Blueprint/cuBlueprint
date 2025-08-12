@@ -4,7 +4,6 @@ import logo from '@/app/(frontend)/_assets/blueprint_banner_negative.svg'
 import Link from 'next/link'
 import NavbarMobile from './NavbarMobile'
 import NavbarLinkItem from './NavbarLinkItem'
-import { cn } from '@/utilities/ui'
 
 function MainLink() {
   return (
