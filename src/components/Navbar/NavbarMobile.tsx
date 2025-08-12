@@ -45,7 +45,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@/components/ui/sheet'
 import { IoMenu } from 'react-icons/io5'
 import NavbarLinkItem from './NavbarLinkItem'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 
 type PropType = {
   data: any[]
