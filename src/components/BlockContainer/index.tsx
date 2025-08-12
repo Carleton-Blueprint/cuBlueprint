@@ -66,7 +66,7 @@ export default function BlockContainer({
         {title && (
           <div
             className={cn(
-              'flex space-x-4 py-2 items-center text-5xl font-bold text-blueprint md:text-6xl',
+              'flex space-x-12 py-2 items-center text-5xl font-bold text-blueprint md:text-6xl',
               {
                 'text-3xl md:text-4xl': titleSize === 'sm',
                 'text-center': centered,
@@ -76,20 +76,18 @@ export default function BlockContainer({
             )}
           >
             <h1>{title}</h1>
-            <div className="relative">
-              {image && (
-                <>
-                  <Image
-                    src={typeof image === 'string' ? image : image.url ? image.url : ''}
-                    width={128}
-                    height={128}
-                    alt="Blueprint Logo"
-                    className="md:ml-12 absolute -bottom-2 left-0 pointer-events-none"
-                  />
-                  <span className="invisible">img</span>
-                </>
-              )}
-            </div>
+            {image && (
+              <div className="relative">
+                <Image
+                  src={typeof image === 'string' ? image : image.url ? image.url : ''}
+                  width={128}
+                  height={128}
+                  alt="Blueprint Logo"
+                  className="absolute -bottom-1/2 left-0 pointer-events-none"
+                />
+                <span className="invisible">img</span>
+              </div>
+            )}
           </div>
         )}
         {containChildren && children}

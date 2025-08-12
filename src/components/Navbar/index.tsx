@@ -15,7 +15,7 @@ function MainLink() {
   )
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function Navbar({ pages }: { pages: any[] }) {
+export default function Navbar({ pages }: { pages: any[] }) {
   return (
     <div className="sticky top-0 z-[999] h-[80px]">
       <div className="flex h-[80px] justify-center bg-blueprint">
