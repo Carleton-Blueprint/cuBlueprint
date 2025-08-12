@@ -51,7 +51,6 @@ import { cn } from '@/utilities/ui'
 type PropType = {
   data: any[]
   open?: boolean
-  setOpen?: Dispatch<SetStateAction<boolean>>
 }
 
 /*
