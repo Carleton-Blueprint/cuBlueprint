@@ -47,4 +47,3 @@ export default function EventCard({ event }: { event: Event }) {
   )
 }
 
-// export default EventCard
