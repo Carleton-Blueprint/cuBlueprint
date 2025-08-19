@@ -55,7 +55,29 @@ export const Events: CollectionConfig<'events'> = {
     },
     {
       name: 'venue',
-      type: 'text',
+      type: 'group',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+              admin: {
+                width: '50%',
+              },
+            },
+            {
+              name: 'address',
+              type: 'text',
+              admin: {
+                width: '50%',
+              },
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'date',

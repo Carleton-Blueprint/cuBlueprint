@@ -878,7 +878,10 @@ export interface Event {
    * Status is auto-generated based on the event date.
    */
   status: string;
-  venue?: string | null;
+  venue: {
+    label: string;
+    address?: string | null;
+  };
   date?: string | null;
   description: string;
   /**
@@ -2198,17 +2201,34 @@ export interface ProjectsPage {
  */
 export interface EventsPage {
   id: string;
-  title: string;
-  image?: (string | null) | Media;
-  /**
-   * Select up from our database of projects to show on the Current Projects block.
-   */
-  events?:
-    | {
-        event: string | Event;
-        id?: string | null;
-      }[]
-    | null;
+  upcomingEvents: {
+    title: string;
+    image?: (string | null) | Media;
+    /**
+     * Select up to 3 events from our database of upcoming events to show on the Upcoming Events block.
+     */
+    upcomingEvents?:
+      | {
+          event: string | Event;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  pastEvents: {
+    title: string;
+    image?: (string | null) | Media;
+    /**
+     * Select up to 15 events from our database of past events to show on the Past Events block.
+     */
+    events?:
+      | {
+          event: string | Event;
+          colSpan: number;
+          rowSpan: number;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2389,13 +2409,31 @@ export interface ProjectsPageSelect<T extends boolean = true> {
  * via the `definition` "eventsPage_select".
  */
 export interface EventsPageSelect<T extends boolean = true> {
-  title?: T;
-  image?: T;
-  events?:
+  upcomingEvents?:
     | T
     | {
-        event?: T;
-        id?: T;
+        title?: T;
+        image?: T;
+        upcomingEvents?:
+          | T
+          | {
+              event?: T;
+              id?: T;
+            };
+      };
+  pastEvents?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        events?:
+          | T
+          | {
+              event?: T;
+              colSpan?: T;
+              rowSpan?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

@@ -7,7 +7,7 @@ type Props = {
   className?: BlockContainerProps
   children: React.ReactNode
   title?: string
-  bg?: 'white' | 'light-blue' | 'dark-blue' | 'blueprint' | boolean
+  bg?: 'white' | 'light-blue' | 'dark-blue' | 'blueprint' | 'darker-blue' | boolean
   roundedCorners?: 'top' | 'bottom' | true | false
   centered?: boolean
   inner?: boolean
@@ -47,6 +47,7 @@ export default function BlockContainer({
         'bg-white': bg === 'white',
         'bg-[#0A1E3A]': bg === 'dark-blue',
         'bg-blueprint': bg === 'blueprint',
+        'bg-[#041122]': bg === 'darker-blue',
         'rounded-[50px]': roundedCorners === true,
         'rounded-t-[50px]': roundedCorners === 'top',
         'rounded-b-[50px]': roundedCorners === 'bottom',
@@ -70,6 +71,7 @@ export default function BlockContainer({
               {
                 'text-3xl md:text-4xl': titleSize === 'sm',
                 'text-center': centered,
+                'text-blueprint-50': bg === 'darker-blue',
                 'text-white': bg === 'dark-blue' || bg === 'blueprint',
                 'mb-5': image,
               },

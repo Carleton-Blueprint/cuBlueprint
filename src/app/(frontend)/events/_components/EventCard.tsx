@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import React from 'react'
-import Image from 'next/image'
 import { Event } from '@/payload-types'
+import { FaLocationDot } from 'react-icons/fa6'
+import { BsCalendar2DateFill } from 'react-icons/bs'
 
 export default function EventCard({ event }: { event: Event }) {
   const eventDate = new Date(event.date ? event.date : '')
@@ -10,40 +11,38 @@ export default function EventCard({ event }: { event: Event }) {
     day: 'numeric',
     year: 'numeric',
   })
+  const formattedTime = eventDate.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  })
   return (
     <Link
       href={`/events/${event.slug}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative mt-12 flex w-full max-w-md transform cursor-pointer flex-col overflow-hidden rounded-[30px] bg-white shadow-md transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl"
+      className="group relative mt-12 flex w-full max-w-md text-blueprint-50 cursor-pointer flex-col overflow-hidden rounded-t rounded-b-2xl p-4 pb-12 border-t-blueprint active:ring-4 hover:ring-4 ring-blueprint border-t-8 bg-[#041122] transition-all duration-300"
     >
-      <div className="relative w-full overflow-hidden md:h-64">
-        <div className="max-h-full overflow-hidden">
-          <Image
-            src={typeof event.image === 'string' ? event.image : event.image?.url || ''}
-            alt={event.title}
-            width={400}
-            height={400}
-            className="rounded-lg"
-          />
+      {/* <p className="h-5">Upcoming Event:</p> */}
+      <h2 className="mb-1 line-clamp-2 h-20 flex items-center text-3xl font-bold md:mb-3 text-blueprint">
+        {event.title}
+      </h2>
+      <div className="flex text-lg flex-col">
+        <div className="flex items-center space-x-2">
+          <FaLocationDot className="text-blueprint text-2xl row-start-1" />
+          <span className="text-2xl font-bold truncate row-start-1">{event.venue.label}</span>
         </div>
+        <div className="mt-2 flex items-center space-x-2">
+          <BsCalendar2DateFill className="text-blueprint text-2xl row-start-1" />
+          <p className="flex flex-col">
+            <span className="text-sm h-3">{formattedTime}</span>
+            <span className="text-md text-blueprint-50 row-start-1">{formattedDate}</span>
+          </p>
+        </div>
+        <p className="mt-4 text-sm text-blueprint-50 row-start-1">{event.description}</p>
       </div>
-      <div className="flex flex-col items-center justify-center p-4 text-center md:p-6">
-        <h2 className="mb-1 text-xl font-bold md:mb-3">{event.title}</h2>
-        <hr className="my-1 w-full border-t-2 border-gray-300 md:my-3" />
-        <p className="text-lg font-semibold text-indigo-600 md:py-2">Location: {event.venue}</p>
-        <p className="text-md italic text-gray-800 md:py-2">{formattedDate}</p>
-        <p className="py-1 text-gray-700 md:py-2">{event.description}</p>
-        {event.status === 'upcoming' ? (
-          <span className="absolute right-4 top-4 rounded-full bg-green-500 px-3 py-1 text-xs font-bold text-white">
-            Upcoming
-          </span>
-        ) : (
-          <span className="absolute right-4 top-4 rounded-full bg-gray-400 px-3 py-1 text-xs font-bold text-white">
-            Passed
-          </span>
-        )}
-      </div>
+      <span className="md:translate-y-100 ring-4 ring-blueprint md:hover:bg-blueprint-600 active:bg-blueprint-700 transition-all duration-300 md:group-hover:translate-y-0 absolute bottom-0 right-0 p-2 text-xs font-bold text-blueprint-50 bg-blueprint rounded-tl-2xl">
+        Read more
+      </span>
     </Link>
   )
 }
