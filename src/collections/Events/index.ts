@@ -1,8 +1,8 @@
-import type { CollectionConfig } from 'payload';
-import { authenticated } from '../../access/authenticated';
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished';
+import type { CollectionConfig } from 'payload'
+import { authenticated } from '../../access/authenticated'
+import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 
-import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const Events: CollectionConfig<'events'> = {
   slug: 'events',
@@ -86,4 +86,4 @@ export const Events: CollectionConfig<'events'> = {
     },
     maxPerDoc: 50,
   },
-};
+}

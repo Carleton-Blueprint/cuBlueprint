@@ -19,8 +19,6 @@ import { getServerSideURL } from './utilities/getURL'
 import { Projects } from './collections/Projects'
 import { Students } from './collections/Students'
 import { Events } from './collections/Events'
-import { Applications } from './collections/Applications'
-import { Jobs } from './collections/Jobs'
 import { Teams } from './collections/Teams'
 import { HomePage } from './globals/HomePage/config'
 import { ProjectsPage } from './globals/ProjectsPage/config'
@@ -78,19 +76,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [
-    Pages,
-    Posts,
-    Media,
-    Categories,
-    Users,
-    Projects,
-    Students,
-    Events,
-    Applications,
-    Jobs,
-    Teams,
-  ],
+  collections: [Pages, Posts, Media, Categories, Users, Projects, Students, Events, Teams],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, HomePage, ProjectsPage],
   plugins: [

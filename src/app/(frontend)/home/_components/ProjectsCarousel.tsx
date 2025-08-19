@@ -72,7 +72,7 @@ export default function ProjectsCarousel({ featuredProjects }: { featuredProject
           className="text-blueprint hover:text-blueprint-400 transition-colors duration-300 ease-in-out size-10"
           onClick={scrollNext}
         />
-        <Progress value={(current / count) * 100} className=" h-6 w-40" />
+        <Progress value={(current / count) * 100} className=" h-4 w-40" />
       </div>
     </Carousel>
   )

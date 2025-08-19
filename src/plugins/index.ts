@@ -10,9 +10,12 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { File } from '@/blocks/Form/File/config'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { Jobs, JobsFields } from '@/collections/Jobs'
+import { Applications, ApplicationsFields } from '@/collections/Applications'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
@@ -61,24 +64,81 @@ export const plugins: Plugin[] = [
     },
     formOverrides: {
       fields: ({ defaultFields }) => {
-        return defaultFields.map((field) => {
-          if ('name' in field && field.name === 'confirmationMessage') {
-            return {
-              ...field,
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    FixedToolbarFeature(),
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                  ]
-                },
-              }),
+        return [
+          // {
+          //   name: 'type',
+          //   type: 'select',
+          //   options: [
+          //     {
+          //       label: 'Job Application',
+          //       value: 'jobApplication',
+          //     },
+          //     {
+          //       label: 'Contact Form',
+          //       value: 'contactForm',
+          //     },
+          //   ],
+          //   required: true,
+          //   admin: {
+          //     description: 'Select the type of form this is.',
+          //   },
+          // },
+          ...defaultFields.map((field) => {
+            if ('name' in field && field.name === 'confirmationMessage') {
+              return {
+                ...field,
+                editor: lexicalEditor({
+                  features: ({ rootFeatures }) => {
+                    return [
+                      ...rootFeatures,
+                      FixedToolbarFeature(),
+                      HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+                    ]
+                  },
+                }),
+              }
             }
-          }
-          return field
-        })
+            return field
+          }),
+        ]
       },
+    },
+  }),
+  formBuilderPlugin({
+    fields: {
+      file: File,
+    },
+    formOverrides: {
+      slug: 'jobs',
+      fields: ({ defaultFields }) => {
+        return [
+          ...JobsFields,
+          ...defaultFields.flatMap((field) => {
+            if ('name' in field && field.name === 'title') {
+              return []
+            } else {
+              return [field]
+            }
+          }),
+        ]
+      },
+      ...Jobs,
+    },
+    formSubmissionOverrides: {
+      slug: 'job-applications',
+      fields: ({ defaultFields }) => {
+        return [
+          ...ApplicationsFields,
+          ...defaultFields.flatMap((field) => {
+            if ('name' in field && field.name === 'title') {
+              return []
+            } else {
+              return [field]
+            }
+          }),
+        ]
+      },
+      ...Applications,
     },
   }),
   searchPlugin({

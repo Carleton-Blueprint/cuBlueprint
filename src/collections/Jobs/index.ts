@@ -2,8 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
-export const Jobs: CollectionConfig<'jobs'> = {
-  slug: 'jobs',
+export const Jobs: Partial<Omit<CollectionConfig, 'fields'>> = {
   access: {
     create: authenticated,
     delete: authenticated,
@@ -11,7 +10,7 @@ export const Jobs: CollectionConfig<'jobs'> = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['position', 'team', 'updatedAt'],
+    // defaultColumns: ['position', 'status', 'team', 'createdAt'],
     useAsTitle: 'position',
     group: 'Hiring',
     // components: {
@@ -30,61 +29,62 @@ export const Jobs: CollectionConfig<'jobs'> = {
     //   },
     // },
   },
-  fields: [
-    {
-      name: 'position',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'team',
-      type: 'relationship',
-      relationTo: ['projects', 'teams'],
-      required: false,
-      hasMany: false,
-      admin: {
-        description: 'Select the project this job is associated with.',
-      },
-    },
-    {
-      name: 'status',
-      type: 'radio',
-      required: true,
-      options: [
-        {
-          label: 'Open',
-          value: 'open',
-        },
-        {
-          label: 'Closed',
-          value: 'closed',
-        },
-      ],
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      required: true,
-      admin: {
-        rows: 5,
-      },
-    },
-    {
-      name: 'extendedDescription',
-      type: 'richText',
-      editor: lexicalEditor({}),
-      required: true,
-    },
-    {
-      name: 'applications',
-      type: 'join',
-      collection: 'applications',
-      on: 'position',
-      admin: {
-        defaultColumns: ['name', 'email', 'status', 'updatedAt'],
-        condition: (_, siblingData) => siblingData.status === 'open',
-      },
-      hasMany: true,
-    },
-  ],
 }
+
+export const JobsFields: CollectionConfig['fields'] = [
+  {
+    name: 'position',
+    type: 'text',
+    required: true,
+  },
+  {
+    name: 'team',
+    type: 'relationship',
+    relationTo: ['projects', 'teams'],
+    required: false,
+    hasMany: false,
+    admin: {
+      description: 'Select the project this job is associated with.',
+    },
+  },
+  {
+    name: 'status',
+    type: 'radio',
+    required: true,
+    options: [
+      {
+        label: 'Open',
+        value: 'open',
+      },
+      {
+        label: 'Closed',
+        value: 'closed',
+      },
+    ],
+  },
+  {
+    name: 'description',
+    type: 'textarea',
+    required: true,
+    admin: {
+      rows: 5,
+    },
+  },
+  {
+    name: 'extendedDescription',
+    type: 'richText',
+    editor: lexicalEditor({}),
+    required: true,
+  },
+  // {
+  //   name: 'applications',
+  //   type: 'join',
+  //   collection: 'applications',
+  //   on: 'position',
+  //   admin: {
+  //     defaultColumns: ['name', 'email', 'status', 'updatedAt'],
+  //     condition: (_, siblingData) => siblingData.status === 'open',
+  //   },
+  //   hasMany: true,
+  // },
+]

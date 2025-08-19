@@ -1,6 +1,7 @@
 import { Checkbox } from './Checkbox'
 import { Country } from './Country'
 import { Email } from './Email'
+import { File } from './File'
 import { Message } from './Message'
 import { Number } from './Number'
 import { Select } from './Select'
@@ -18,4 +19,5 @@ export const fields = {
   state: State,
   text: Text,
   textarea: Textarea,
+  file: File,
 }
