@@ -1621,7 +1621,12 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   status?: T;
-  venue?: T;
+  venue?:
+    | T
+    | {
+        label?: T;
+        address?: T;
+      };
   date?: T;
   description?: T;
   extendedDescription?: T;

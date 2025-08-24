@@ -4,16 +4,9 @@ import React, { useState, useRef } from 'react'
 import { motion, useTransform, AnimatePresence, useMotionValue, useSpring } from 'motion/react'
 
 export const AnimatedTooltip = ({
-  //   items,
   children,
   text,
 }: {
-  //   items: {
-  //     id: number
-  //     name: string
-  //     designation: string
-  //     image: string
-  //   }[]
   children: React.ReactNode
   text?: string
 }) => {
@@ -25,20 +18,19 @@ export const AnimatedTooltip = ({
   const rotate = useSpring(useTransform(x, [-100, 100], [-45, 45]), springConfig)
   const translateX = useSpring(useTransform(x, [-100, 100], [-50, 50]), springConfig)
 
-  const handleMouseMove = (event: any) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current)
     }
 
     animationFrameRef.current = requestAnimationFrame(() => {
-      const halfWidth = event.target.offsetWidth / 2
+      const halfWidth = (event.target as HTMLElement).offsetWidth / 2
       x.set(event.nativeEvent.offsetX - halfWidth)
     })
   }
 
   return (
     <>
-      {/* {items.map((item, idx) => ( */}
       <div
         className="group relative -mr-4"
         key={1}
@@ -68,25 +60,16 @@ export const AnimatedTooltip = ({
                 }}
                 className="absolute -top-16 left-1/2 z-50 flex -translate-x-1/2 flex-col items-center justify-center rounded-md bg-blueprint px-4 py-2 text-xs shadow-xl"
               >
-                {/* <div className="absolute inset-x-10 -bottom-px z-30 h-px w-[20%] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
-              <div className="absolute -bottom-px left-10 z-30 h-px w-[40%] bg-gradient-to-r from-transparent via-sky-500 to-transparent" /> */}
+                {/* rgb rainbow underline
+                 <div className="absolute inset-x-10 -bottom-px z-30 h-px w-[20%] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+                <div className="absolute -bottom-px left-10 z-30 h-px w-[40%] bg-gradient-to-r from-transparent via-sky-500 to-transparent" /> */}
                 <div className="relative z-30 text-base font-bold text-white">{text}</div>
-                {/* <div className="text-xs text-white">{item.designation}</div> */}
               </motion.div>
             )}
           </AnimatePresence>
         )}
-        {/* <img
-            onMouseMove={handleMouseMove}
-            height={100}
-            width={100}
-            src={item.image}
-            alt={item.name}
-            className="relative !m-0 h-14 w-14 rounded-full border-2 border-white object-cover object-top !p-0 transition duration-500 group-hover:z-30 group-hover:scale-105"
-          /> */}
-        {children}
+        <div onMouseMove={handleMouseMove}>{children}</div>
       </div>
-      {/* ))} */}
     </>
   )
 }

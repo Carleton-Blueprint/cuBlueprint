@@ -22,8 +22,7 @@ export default function EventCard({ event }: { event: Event }) {
       rel="noopener noreferrer"
       className="group relative mt-12 flex w-full max-w-md text-blueprint-50 cursor-pointer flex-col overflow-hidden rounded-t rounded-b-2xl p-4 pb-12 border-t-blueprint active:ring-4 hover:ring-4 ring-blueprint border-t-8 bg-[#041122] transition-all duration-300"
     >
-      {/* <p className="h-5">Upcoming Event:</p> */}
-      <h2 className="mb-1 line-clamp-2 h-20 flex items-center text-3xl font-bold md:mb-3 text-blueprint">
+      <h2 className="mb-1 line-clamp-2 h-20 flex items-end text-3xl font-bold md:mb-3 text-blueprint">
         {event.title}
       </h2>
       <div className="flex text-lg flex-col">
@@ -46,4 +45,3 @@ export default function EventCard({ event }: { event: Event }) {
     </Link>
   )
 }
-
