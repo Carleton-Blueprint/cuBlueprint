@@ -2,7 +2,15 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Student } from '@/payload-types'
 
-function TeamProfileBase({ student, hover = false }: { student: Student; hover: boolean }) {
+function TeamProfileBase({
+  student,
+  role,
+  hover = false,
+}: {
+  student: Student
+  role: string
+  hover: boolean
+}) {
   return (
     <div
       className={`flex flex-col items-center space-y-1 rounded-2xl py-3 text-center ${
@@ -22,21 +30,25 @@ function TeamProfileBase({ student, hover = false }: { student: Student; hover: 
         />
       </div>
       <p className="text-md font-bold md:text-lg">{student.name}</p>
-      <p className="text-sm capitalize md:text-base">{student.position}</p>
+      <p className="text-sm capitalize md:text-base">{role}</p>
     </div>
   )
 }
 
-export default function TeamProfile({ student }: { student: string | Student }) {
-  if (typeof student === 'string') {
+export default function TeamProfile({
+  student,
+}: {
+  student: { student: string | Student; role: string }
+}) {
+  if (typeof student.student === 'string') {
     return
   }
-  if (student.url === '') {
-    return <TeamProfileBase student={student} hover={false} />
+  if (student.student.url === '') {
+    return <TeamProfileBase student={student.student} role={student.role} hover={false} />
   } else
     return (
-      <Link href={student.url} target="_blank">
-        <TeamProfileBase student={student} hover={true} />
+      <Link href={student.student.url} target="_blank">
+        <TeamProfileBase student={student.student} role={student.role} hover={true} />
       </Link>
     )
 }

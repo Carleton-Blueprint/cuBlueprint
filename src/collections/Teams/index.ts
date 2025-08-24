@@ -28,11 +28,38 @@ export const Teams: CollectionConfig<'teams'> = {
     },
     {
       name: 'team',
-      type: 'join',
-      collection: 'students',
-      on: 'team',
-      maxDepth: 3,
-      hasMany: true,
+      type: 'array',
+      fields: [
+        {
+          name: 'role',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'student',
+          type: 'relationship',
+          relationTo: 'students',
+          filterOptions: {
+            status: {
+              equals: 'current',
+            },
+          },
+          required: true,
+        },
+        {
+          name: 'startDate',
+          type: 'date',
+          required: true,
+        },
+        {
+          name: 'endDate',
+          type: 'date',
+        },
+      ],
+      labels: {
+        singular: 'Team member',
+        plural: 'Team members',
+      },
     },
   ],
 }

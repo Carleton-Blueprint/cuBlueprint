@@ -92,11 +92,24 @@ export const Projects: CollectionConfig<'projects'> = {
     },
     {
       name: 'team',
-      type: 'join',
-      collection: 'students',
-      on: 'team',
-      hasMany: true,
-      maxDepth: 2,
+      type: 'array',
+      fields: [
+        {
+          name: 'student',
+          type: 'relationship',
+          relationTo: ['students'],
+          filterOptions: {
+            status: {
+              equals: 'current',
+            },
+          },
+        },
+        {
+          name: 'role',
+          type: 'text',
+          required: true,
+        },
+      ],
     },
   ],
   versions: {

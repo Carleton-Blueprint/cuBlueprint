@@ -50,9 +50,12 @@ export default async function FullProjectPage({ params }: { params: Promise<{ sl
     return notFound()
   }
   const students =
-    project.team?.docs?.flatMap((member) => {
-      if (typeof member === 'string') return []
-      return member
+    project.team?.flatMap((member) => {
+      if (!member.student || typeof member.student.value === 'string') {
+        return []
+      } else {
+        return [{ student: member.student.value, role: member.role }]
+      }
     }) || []
 
   const statusMappings = {
@@ -102,7 +105,7 @@ export default async function FullProjectPage({ params }: { params: Promise<{ sl
         </div>
       </BlockContainer>
 
-      {students.length > 0 && <Section team={students} />}
+      {students.length > 0 && <Section team={{ name: project.companyName, students: students }} />}
     </div>
   )
 }

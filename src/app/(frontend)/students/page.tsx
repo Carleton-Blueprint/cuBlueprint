@@ -8,27 +8,35 @@ export const revalidate = 3600
 
 export default async function Students() {
   const payload = await getPayload({ config: configPromise })
-  // const res = await payload.find({
-  //   collection: 'students',
-  // })
-  const res = await payload.find({
-    collection: 'teams',
+  const resGlobal = await payload.findGlobal({
+    slug: 'studentsPage',
     depth: 3,
   })
-  // const students = res.docs
-  const teams = res.docs
 
-  // let teamNamesSet = new Set<string>()
-  // for (const student of students) {
-  //   teamNamesSet.add(student.team)
-  // }
-
-  // const teamNamesArray = Array.from(teamNamesSet)
-  // const teams: TeamDataType[] = []
-  // for (const teamName of teamNamesArray) {
-  //   const teamMembers = students.filter((student) => student.team == teamName)
-  //   teams.push({ teamName, teamMembers })
-  // }
+  // process the data to get team name and members/roles
+  const teams =
+    resGlobal?.teams?.flatMap((team) => {
+      if (team.team.relationTo === 'teams') {
+        if (typeof team.team.value === 'string' || !team.team.value.team) return []
+        const students = team.team.value.team.flatMap((student) => {
+          if (typeof student.student === 'string' || !student) return []
+          return [{ student: student.student, role: student.role }]
+        })
+        return [{ name: team.team.value.name, students }]
+      } else if (team.team.relationTo === 'projects') {
+        if (typeof team.team.value === 'string' || !team.team.value.team) return []
+        const students = team.team.value.team.flatMap((student) => {
+          if (!student.student || typeof student.student.value === 'string') {
+            return []
+          } else {
+            return [{ student: student.student.value, role: student.role }]
+          }
+        })
+        return [{ name: team.team.value.companyName, students }]
+      } else {
+        return []
+      }
+    }) || []
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-blueprint-50">

@@ -88,14 +88,8 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
-    projects: {
-      team: 'students';
-    };
     jobs: {
       applications: 'applications';
-    };
-    teams: {
-      team: 'students';
     };
   };
   collectionsSelect: {
@@ -127,12 +121,14 @@ export interface Config {
     footer: Footer;
     homePage: HomePage;
     projectsPage: ProjectsPage;
+    studentsPage: StudentsPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     homePage: HomePageSelect<false> | HomePageSelect<true>;
     projectsPage: ProjectsPageSelect<false> | ProjectsPageSelect<true>;
+    studentsPage: StudentsPageSelect<false> | StudentsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -789,11 +785,16 @@ export interface Project {
   };
   url?: string | null;
   image?: (string | null) | Media;
-  team?: {
-    docs?: (string | Student)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
+  team?:
+    | {
+        student?: {
+          relationTo: 'students';
+          value: string | Student;
+        } | null;
+        role: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -810,55 +811,6 @@ export interface Student {
   status: 'current' | 'past';
   url: string;
   image?: (string | null) | Media;
-  team?:
-    | (
-        | {
-            relationTo: 'projects';
-            value: string | Project;
-          }
-        | {
-            relationTo: 'teams';
-            value: string | Team;
-          }
-      )[]
-    | null;
-  position?: string | null;
-  /**
-   * Past teams and positions held by the student.
-   */
-  history?:
-    | {
-        team:
-          | {
-              relationTo: 'projects';
-              value: string | Project;
-            }
-          | {
-              relationTo: 'teams';
-              value: string | Team;
-            };
-        position: string;
-        startYear: string;
-        endYear?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "teams".
- */
-export interface Team {
-  id: string;
-  name: string;
-  slug: string;
-  team?: {
-    docs?: (string | Student)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
   updatedAt: string;
   createdAt: string;
 }
@@ -966,6 +918,26 @@ export interface Job {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "teams".
+ */
+export interface Team {
+  id: string;
+  name: string;
+  slug: string;
+  team?:
+    | {
+        role: string;
+        student: string | Student;
+        startDate: string;
+        endDate?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1570,7 +1542,13 @@ export interface ProjectsSelect<T extends boolean = true> {
   extendedDescription?: T;
   url?: T;
   image?: T;
-  team?: T;
+  team?:
+    | T
+    | {
+        student?: T;
+        role?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1586,17 +1564,6 @@ export interface StudentsSelect<T extends boolean = true> {
   status?: T;
   url?: T;
   image?: T;
-  team?: T;
-  position?: T;
-  history?:
-    | T
-    | {
-        team?: T;
-        position?: T;
-        startYear?: T;
-        endYear?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1654,7 +1621,15 @@ export interface JobsSelect<T extends boolean = true> {
 export interface TeamsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
-  team?: T;
+  team?:
+    | T
+    | {
+        role?: T;
+        student?: T;
+        startDate?: T;
+        endDate?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2186,6 +2161,32 @@ export interface ProjectsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studentsPage".
+ */
+export interface StudentsPage {
+  id: string;
+  teams?:
+    | {
+        /**
+         * Select the team to feature on the Students page. Only students with "Current" status will be available for selection.
+         */
+        team:
+          | {
+              relationTo: 'teams';
+              value: string | Team;
+            }
+          | {
+              relationTo: 'projects';
+              value: string | Project;
+            };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2351,6 +2352,21 @@ export interface ProjectsPageSelect<T extends boolean = true> {
               project?: T;
               id?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studentsPage_select".
+ */
+export interface StudentsPageSelect<T extends boolean = true> {
+  teams?:
+    | T
+    | {
+        team?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

@@ -24,6 +24,7 @@ import { Jobs } from './collections/Jobs'
 import { Teams } from './collections/Teams'
 import { HomePage } from './globals/HomePage/config'
 import { ProjectsPage } from './globals/ProjectsPage/config'
+import { StudentsPage } from './globals/StudentsPage/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -92,7 +93,7 @@ export default buildConfig({
     Teams,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, HomePage, ProjectsPage],
+  globals: [Header, Footer, HomePage, ProjectsPage, StudentsPage],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

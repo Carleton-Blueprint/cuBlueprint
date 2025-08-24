@@ -10,7 +10,7 @@ export const Students: CollectionConfig<'students'> = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['name', 'email', 'updatedAt'],
+    defaultColumns: ['image', 'name', 'email', 'updatedAt'],
     useAsTitle: 'name',
     group: 'People',
   },
@@ -53,60 +53,22 @@ export const Students: CollectionConfig<'students'> = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-    },
-    {
-      name: 'team',
-      type: 'relationship',
-      relationTo: ['projects', 'teams'],
-      hasMany: true,
-    },
-    {
-      name: 'position',
-      type: 'text',
-    },
-    {
-      name: 'history',
-      type: 'array',
-      label: 'Team History',
+      displayPreview: true,
       admin: {
-        description: 'Past teams and positions held by the student.',
+        components: {
+          Cell: '@/collections/Students/components/Cell',
+        },
       },
-      minRows: 1,
-      maxRows: 10,
-      fields: [
-        {
-          name: 'team',
-          type: 'relationship',
-          relationTo: ['projects', 'teams'],
-          required: true,
+    },
+    {
+      name: 'teamHistory',
+      type: 'ui',
+
+      admin: {
+        components: {
+          Field: '@/collections/Students/components/TeamHistory',
         },
-        {
-          name: 'position',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'startYear',
-          type: 'date',
-          required: true,
-          admin: {
-            date: {
-              pickerAppearance: 'monthOnly',
-              displayFormat: 'MMM YYYY',
-            },
-          },
-        },
-        {
-          name: 'endYear',
-          type: 'date',
-          admin: {
-            date: {
-              pickerAppearance: 'monthOnly',
-              displayFormat: 'MMM YYYY',
-            },
-          },
-        },
-      ],
+      },
     },
   ],
 }
