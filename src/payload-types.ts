@@ -122,6 +122,7 @@ export interface Config {
     homePage: HomePage;
     projectsPage: ProjectsPage;
     studentsPage: StudentsPage;
+    eventsPage: EventsPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
@@ -129,6 +130,7 @@ export interface Config {
     homePage: HomePageSelect<false> | HomePageSelect<true>;
     projectsPage: ProjectsPageSelect<false> | ProjectsPageSelect<true>;
     studentsPage: StudentsPageSelect<false> | StudentsPageSelect<true>;
+    eventsPage: EventsPageSelect<false> | EventsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -824,10 +826,19 @@ export interface Event {
   visibility?: boolean | null;
   title: string;
   slug: string;
-  status: 'upcoming' | 'past';
-  venue?: string | null;
+  /**
+   * Status is auto-generated based on the event date.
+   */
+  status: string;
+  venue: {
+    label: string;
+    address?: string | null;
+  };
   date?: string | null;
   description: string;
+  /**
+   * This will appear on the full event page. Do not include event details that have already been added in other fields as those will be displayed separately.
+   */
   extendedDescription: {
     root: {
       type: string;
@@ -1577,7 +1588,12 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   status?: T;
-  venue?: T;
+  venue?:
+    | T
+    | {
+        label?: T;
+        address?: T;
+      };
   date?: T;
   description?: T;
   extendedDescription?: T;
@@ -2182,6 +2198,43 @@ export interface StudentsPage {
         id?: string | null;
       }[]
     | null;
+    updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "eventsPage".
+ */
+export interface EventsPage {
+  id: string;
+  upcomingEvents: {
+    title: string;
+    image?: (string | null) | Media;
+    /**
+     * Select up to 3 events from our database of upcoming events to show on the Upcoming Events block.
+     */
+    upcomingEvents?:
+      | {
+          event: string | Event;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  pastEvents: {
+    title: string;
+    image?: (string | null) | Media;
+    /**
+     * Select up to 15 events from our database of past events to show on the Past Events block.
+     */
+    events?:
+      | {
+          event: string | Event;
+          colSpan: number;
+          rowSpan: number;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2367,6 +2420,41 @@ export interface StudentsPageSelect<T extends boolean = true> {
     | {
         team?: T;
         id?: T;
+};
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "eventsPage_select".
+ */
+export interface EventsPageSelect<T extends boolean = true> {
+  upcomingEvents?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        upcomingEvents?:
+          | T
+          | {
+              event?: T;
+              id?: T;
+            };
+      };
+  pastEvents?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        events?:
+          | T
+          | {
+              event?: T;
+              colSpan?: T;
+              rowSpan?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

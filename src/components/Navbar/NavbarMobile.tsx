@@ -71,7 +71,7 @@ export default function NavbarMobile({ data }: PropType) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className={styles.sheetTrigger['md']}>
-        <IoMenu className="-pt-4 size-16 text-white" />
+        <IoMenu className="-pt-4 size-14 text-white" />
       </SheetTrigger>
       <SheetContent
         side={'top'}

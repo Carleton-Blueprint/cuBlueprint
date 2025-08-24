@@ -25,6 +25,7 @@ import { Teams } from './collections/Teams'
 import { HomePage } from './globals/HomePage/config'
 import { ProjectsPage } from './globals/ProjectsPage/config'
 import { StudentsPage } from './globals/StudentsPage/config'
+import { EventsPage } from './globals/EventsPage/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -93,7 +94,7 @@ export default buildConfig({
     Teams,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, HomePage, ProjectsPage, StudentsPage],
+  globals: [Header, Footer, HomePage, ProjectsPage, EventsPage, StudentsPage],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder
