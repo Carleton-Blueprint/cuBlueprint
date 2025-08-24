@@ -23,6 +23,12 @@ export default async function EventsPage() {
   const pastEventsImage = resGlobal.pastEvents.image
   const upcomingEventsTitle = resGlobal.upcomingEvents.title
   const upcomingEventsImage = resGlobal.upcomingEvents.image
+
+  // colRowSpan 2D array is used to define tailwind css styling for BentoGridItems
+  // desired width and height can be passed in (subtract 1 to avoid index out of bounds error)
+  // example: <BentoGridItem ... className={colRowSpans[desiredWidth - 1][desiredHeight - 1]}>...</BentoGridItem>
+  // special styling can be applied to adjust elements within the BentoGridItem component to
+  // align with their width and height
   const colRowSpans = [
     ['md:col-span-1 md:row-span-1 [&_h2]:text-2xl', 'md:col-span-1 md:row-span-2 [&_h2]:text-2xl'],
     [
@@ -31,7 +37,7 @@ export default async function EventsPage() {
     ],
     [
       'md:col-span-3 md:row-span-1',
-      'md:col-span-3 md:row-span-2 [&_h2]:text-2xl [&_h2]:md:text-4xl [&_p]:md:text-xl [&_p]:md:h-24',
+      'md:col-span-3 md:row-span-2 [&_h2]:md:h-12 [&_h2]:text-2xl [&_h2]:md:text-4xl [&_p]:md:text-xl [&_p]:md:h-24',
     ],
   ]
   return (

@@ -153,3 +153,9 @@
     opacity: 0;
   }
 }
+
+@custom-variant supports-hover {
+  @media (hover: hover) and (pointer: fine) {
+    @slot;
+  }
+}

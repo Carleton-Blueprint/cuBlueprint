@@ -47,10 +47,10 @@ export const BentoGridItem = ({
       <div className="text-[#E7F2FD] h-full absolute bottom-0 left-0 py-4 px-4 w-full bg-gradient-to-t from-blueprint/90 from-25% to-blueprint/15 to-65%">
         {icon}
         <div className="text-white overflow-hidden absolute bottom-4 left-4 max-w-[90%]">
-          <h2 className="mt-2 text-white transition-transform duration-300 ease-in-out md:translate-y-18 md:group-hover:translate-y-0 font-bold truncate">
+          <h2 className="mt-2 text-white transition-transform duration-300 ease-in-out supports-hover:md:translate-y-18 supports-hover:md:group-hover:translate-y-0 font-bold truncate">
             {title}
           </h2>
-          <p className="font-normal h-18 transition-transform duration-300 ease-in-out md:translate-y-100 md:group-hover:translate-y-0 line-clamp-3">
+          <p className="font-normal h-18 transition-transform duration-300 ease-in-out supports-hover:md:translate-y-100 supports-hover:md:group-hover:translate-y-0 line-clamp-3">
             {description}
           </p>
         </div>
