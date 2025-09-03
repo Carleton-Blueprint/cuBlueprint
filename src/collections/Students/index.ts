@@ -47,7 +47,6 @@ export const Students: CollectionConfig<'students'> = {
     {
       name: 'url',
       type: 'text',
-      required: true,
     },
     {
       name: 'image',

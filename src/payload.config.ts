@@ -52,6 +52,11 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     user: Users.slug,
+    avatar: {
+      // The `Avatar` component renders the user's avatar image.
+      // Feel free to delete this at any time. Simply remove the line below.
+      Component: '@/components/Avatar',
+    },
     livePreview: {
       breakpoints: [
         {
