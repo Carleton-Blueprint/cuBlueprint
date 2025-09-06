@@ -30,9 +30,6 @@ function TeamProfileBase({
       <div
         className={cn(
           'mb-2 flex h-28 w-28 items-center overflow-hidden rounded-full bg-blueprint-200 md:h-32 md:w-32',
-          {
-            'border-4 border-blueprint-dark group-hover:border-[#041122]': hover,
-          },
         )}
       >
         <Image
@@ -47,7 +44,9 @@ function TeamProfileBase({
         />
       </div>
       <p className="text-sm capitalize md:text-base">{role}</p>
-      <p className="text-md font-bold md:text-lg">{student.name}</p>
+      <p className={cn('text-md font-bold md:text-lg', { 'text-blueprint': hover })}>
+        {student.name}
+      </p>
     </div>
   )
 }

@@ -13,7 +13,6 @@ export default function Section({ team, bg, centered }: SectionProps) {
   return (
     <BlockContainer
       title={team.name}
-      shadow
       roundedCorners={true}
       padding="less"
       gap="less"
