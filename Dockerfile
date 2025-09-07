@@ -9,17 +9,27 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-RUN npm install -g corepack@latest
-
 # Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci --legacy-peer-deps; \
-  elif [ -f pnpm-lock.yaml ]; then pnpm install -g corepack@latest && corepack enable pnpm && corepack prepare pnpm@9.8.0 --activate && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+COPY pnpm-lock.yaml* ./ 
+# COPY package.json yarn.lock* package-lock.json*
+# RUN \
+#   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+#   elif [ -f package-lock.json ]; then npm ci --legacy-peer-deps; \
+#   elif [ -f pnpm-lock.yaml ]; then pnpm install -g corepack@latest && corepack enable pnpm && corepack prepare pnpm@9.8.0 --activate && pnpm i --frozen-lockfile; \
+#   else echo "Lockfile not found." && exit 1; \
+#   fi
+# 1. Set up pnpm's global binary directory
+ENV PNPM_HOME=/root/.pnpm-global
+ENV PATH=$PNPM_HOME:$PATH
 
+# Optionally: create the directory for safety
+RUN mkdir -p /root/.pnpm-global
+
+# 2. Install and activate pnpm
+RUN npm install -g corepack@latest && corepack enable pnpm && corepack prepare pnpm@9.8.0 --activate
+
+# 3. Install dependencies
+RUN pnpm install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
