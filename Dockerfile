@@ -10,8 +10,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY pnpm-lock.yaml* ./ 
-# COPY package.json yarn.lock* package-lock.json*
+COPY package.json pnpm-lock.yaml* ./
+# COPY yarn.lock* package-lock.json*
 # RUN \
 #   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
 #   elif [ -f package-lock.json ]; then npm ci --legacy-peer-deps; \
