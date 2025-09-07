@@ -7,8 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import usePayload from '@/hooks/usePayload'
-import { Media } from '@/payload-types'
+import { Event, Media } from '@/payload-types'
 
 type HomeEventsProps = {
   visibility?: boolean
@@ -16,7 +15,7 @@ type HomeEventsProps = {
   image?: string | Media | null
   data?:
     | {
-        event: string | any // Adjust type as needed
+        event: { relationTo: string; value: string | Event } // Adjust type as needed
         id?: string | null
       }[]
     | null
@@ -27,7 +26,7 @@ export default function HomeEvents({ visibility, title, image, data }: HomeEvent
     return null
   }
   const events = data.flatMap(
-    ({ event }) => (typeof event.value !== 'string' ? event.value : []), // Skip if event is of type string
+    ({ event }) => (typeof event.value === 'string' ? [] : event.value), // Skip if event is of type string
   )
 
   // const events = res.docs

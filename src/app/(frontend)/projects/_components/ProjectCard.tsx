@@ -10,7 +10,6 @@ import {
 import { Media, Project } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import Image from 'next/image'
-import { FaGithub } from 'react-icons/fa'
 import { FaArrowCircleRight } from 'react-icons/fa'
 
 export default function ProjectCard({

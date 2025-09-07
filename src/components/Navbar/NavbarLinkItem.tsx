@@ -19,6 +19,7 @@ export default function NavbarLinkItem({
   page,
   setOpen,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   page: any
   setOpen?: Dispatch<SetStateAction<boolean>>
 }) {

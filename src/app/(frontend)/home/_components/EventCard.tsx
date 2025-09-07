@@ -4,15 +4,14 @@ import Image from 'next/image'
 import { Event } from '@/payload-types'
 
 export default function EventCard({ data }: { data: Event }) {
-  let title
-  let path
-  if ('venue' in data) {
-    title = data.title
-    path = '/events/' + data.slug
-  } else {
-    title = data.title
-    path = '/news/' + data.slug
-  }
+  const title = data.title
+  const path = '/events/' + data.slug
+  // if ('venue' in data) {
+  // }
+  // else {
+  //   title = data.title
+  //   path = '/news/' + data.slug
+  // }
 
   return (
     <div className="group">

@@ -1,9 +1,9 @@
 import type { JoinFieldServerProps } from 'payload'
-import useStudentTeams from '../hooks/useStudentTeams'
+import getStudentTeams from '../hooks/useStudentTeams'
 
-export default async function TeamHistory({ payload, data }: JoinFieldServerProps) {
+export default async function TeamHistory({ data }: JoinFieldServerProps) {
   const studentId = data.id as string
-  const teams = await useStudentTeams(studentId)
+  const teams = await getStudentTeams(studentId)
 
   return (
     <>

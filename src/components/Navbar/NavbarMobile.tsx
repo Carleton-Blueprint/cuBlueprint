@@ -48,6 +48,7 @@ import NavbarLinkItem from './NavbarLinkItem'
 import { useState } from 'react'
 
 type PropType = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[]
 }
 

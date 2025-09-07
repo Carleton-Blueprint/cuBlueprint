@@ -98,7 +98,7 @@ export const Events: CollectionConfig<'events'> = {
       name: 'extendedDescription',
       type: 'richText',
       editor: lexicalEditor({
-        features: ({ defaultFeatures, rootFeatures }) => [
+        features: ({ defaultFeatures }) => [
           ...defaultFeatures,
           LinkFeature({
             // Example showing how to customize the built-in fields
