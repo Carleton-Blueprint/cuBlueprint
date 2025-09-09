@@ -67,7 +67,7 @@ export default async function EventsPage() {
           inner
           image={pastEventsImage || undefined}
         >
-          <BentoGrid className="max-w-full md:w-screen mx-auto">
+          <BentoGrid className="max-w-full md:w-screen mx-auto pt-6">
             {pastEvents.map(({ event, colSpan, rowSpan }, i) => (
               <BentoGridItem
                 key={i}
