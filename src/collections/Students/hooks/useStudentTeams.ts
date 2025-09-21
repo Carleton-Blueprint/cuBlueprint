@@ -1,7 +1,7 @@
-import usePayload from '@/hooks/usePayload'
+import accessPayload from '@/hooks/usePayload'
 
-export default async function useStudentTeams(studentId: string) {
-  const { payload } = await usePayload()
+export default async function getStudentTeams(studentId: string) {
+  const { payload } = await accessPayload()
   const res = await payload.find({
     collection: 'teams',
     where: {

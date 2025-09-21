@@ -1,28 +1,12 @@
 import React from 'react'
 import CurrentProjects from './_components/CurrentProjects'
 import PastProjects from './_components/PastProjects'
-import usePayload from '@/hooks/usePayload'
+import accessPayload from '@/hooks/usePayload'
 
 export const revalidate = 3600
 
 export default async function Projects() {
-  const { payload } = await usePayload()
-  const currentRes = await payload.find({
-    collection: 'projects',
-    where: {
-      status: {
-        equals: 'in-progress',
-      },
-    },
-  })
-  const pastRes = await payload.find({
-    collection: 'projects',
-    where: {
-      status: {
-        equals: 'completed',
-      },
-    },
-  })
+  const { payload } = await accessPayload()
 
   const resGlobal = await payload.findGlobal({
     slug: 'projectsPage',

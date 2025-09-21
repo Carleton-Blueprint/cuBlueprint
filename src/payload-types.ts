@@ -121,16 +121,16 @@ export interface Config {
     footer: Footer;
     homePage: HomePage;
     projectsPage: ProjectsPage;
-    studentsPage: StudentsPage;
     eventsPage: EventsPage;
+    studentsPage: StudentsPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     homePage: HomePageSelect<false> | HomePageSelect<true>;
     projectsPage: ProjectsPageSelect<false> | ProjectsPageSelect<true>;
-    studentsPage: StudentsPageSelect<false> | StudentsPageSelect<true>;
     eventsPage: EventsPageSelect<false> | EventsPageSelect<true>;
+    studentsPage: StudentsPageSelect<false> | StudentsPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -2177,32 +2177,6 @@ export interface ProjectsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "studentsPage".
- */
-export interface StudentsPage {
-  id: string;
-  teams?:
-    | {
-        /**
-         * Select the team to feature on the Students page. Only students with "Current" status will be available for selection.
-         */
-        team:
-          | {
-              relationTo: 'teams';
-              value: string | Team;
-            }
-          | {
-              relationTo: 'projects';
-              value: string | Project;
-            };
-        id?: string | null;
-      }[]
-    | null;
-    updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "eventsPage".
  */
 export interface EventsPage {
@@ -2235,6 +2209,32 @@ export interface EventsPage {
         }[]
       | null;
   };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studentsPage".
+ */
+export interface StudentsPage {
+  id: string;
+  teams?:
+    | {
+        /**
+         * Select the team to feature on the Students page. Only students with "Current" status will be available for selection.
+         */
+        team:
+          | {
+              relationTo: 'teams';
+              value: string | Team;
+            }
+          | {
+              relationTo: 'projects';
+              value: string | Project;
+            };
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2412,21 +2412,6 @@ export interface ProjectsPageSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "studentsPage_select".
- */
-export interface StudentsPageSelect<T extends boolean = true> {
-  teams?:
-    | T
-    | {
-        team?: T;
-        id?: T;
-};
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "eventsPage_select".
  */
 export interface EventsPageSelect<T extends boolean = true> {
@@ -2455,6 +2440,21 @@ export interface EventsPageSelect<T extends boolean = true> {
               rowSpan?: T;
               id?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studentsPage_select".
+ */
+export interface StudentsPageSelect<T extends boolean = true> {
+  teams?:
+    | T
+    | {
+        team?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

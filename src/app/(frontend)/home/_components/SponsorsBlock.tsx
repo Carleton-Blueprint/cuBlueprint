@@ -1,6 +1,5 @@
 import BlockContainer from '@/components/BlockContainer'
 import SponsorCard from './SponsorCard'
-import ServerProLogo from '../_assets/server_pro_logo.svg'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Media } from '@/payload-types'
 

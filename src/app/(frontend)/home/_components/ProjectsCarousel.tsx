@@ -1,16 +1,8 @@
 'use client'
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel'
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import ProjectCard from './ProjectCard'
 import { FaCircleChevronLeft, FaCircleChevronRight } from 'react-icons/fa6'
 
-import { ChevronLeftCircle, ChevronRightCircle, ChevronRightCircleIcon } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import { useEffect, useState } from 'react'
 import { Project } from '@/payload-types'
@@ -41,7 +33,7 @@ export default function ProjectsCarousel({ featuredProjects }: { featuredProject
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap() + 1)
     })
-  })
+  }, [api])
   return (
     <Carousel
       opts={{

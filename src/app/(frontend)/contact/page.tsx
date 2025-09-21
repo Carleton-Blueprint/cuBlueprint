@@ -2,10 +2,6 @@ import React from 'react'
 import BlockContainer from '@/components/BlockContainer'
 import { GrInstagram } from 'react-icons/gr'
 import { FaLinkedinIn } from 'react-icons/fa'
-import ContactCard from './_components/ContactCard'
-import { MdEmail } from 'react-icons/md'
-import { FaDiscord } from 'react-icons/fa'
-import { FaInstagram } from 'react-icons/fa'
 import Form from './_components/Form'
 
 function Page() {

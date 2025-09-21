@@ -1,12 +1,6 @@
 import React from 'react'
-import { StaticImageData } from 'next/image'
 import Image from 'next/image'
 import BlockContainer from '@/components/BlockContainer'
-import mission from '../_assets/ourValues/mission.svg'
-import culture from '../_assets/ourValues/culture.svg'
-import innovate from '../_assets/ourValues/innovate.svg'
-import personal from '../_assets/ourValues/personal.svg'
-import humble from '../_assets/ourValues/humble.svg'
 import { cn } from '@/utilities/ui'
 import { Media } from '@/payload-types'
 
