@@ -93,6 +93,7 @@ export default buildConfig({
     Jobs,
     Teams,
   ],
+  serverURL: getServerSideURL(),
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, HomePage, ProjectsPage, EventsPage, StudentsPage],
   plugins: [
