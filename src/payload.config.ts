@@ -5,6 +5,7 @@ import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
@@ -98,7 +99,20 @@ export default buildConfig({
   globals: [Header, Footer, HomePage, ProjectsPage, EventsPage, StudentsPage],
   plugins: [
     ...plugins,
-    // storage-adapter-placeholder
+    s3Storage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET || '',
+        },
+        region: 'auto',
+        endpoint: process.env.S3_ENDPOINT || '',
+      },
+    }),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,

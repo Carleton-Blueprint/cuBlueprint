@@ -20,13 +20,15 @@ export default function SponsorCard({ sponsor }: { sponsor: SponsorDataType }) {
         </CardContent>
       </div>
       <div className="flex h-1/3 justify-center md:w-1/4 md:justify-end">
-        <Image
-          className="w-[175px] rounded-full"
-          src={typeof sponsor.image === 'string' ? sponsor.image : sponsor.image?.url || ''}
-          width={175}
-          height={175}
-          alt={`${sponsor.name} logo`}
-        />
+        {sponsor.image && typeof sponsor.image !== 'string' && sponsor.image.url && (
+          <Image
+            className="w-[175px] rounded-full"
+            src={sponsor.image.url}
+            width={175}
+            height={175}
+            alt={`${sponsor.name} logo`}
+          />
+        )}
       </div>
     </div>
   )
