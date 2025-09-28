@@ -37,7 +37,7 @@ export default async function CurrentProjects({ projects, title, image }: Curren
         <div className="flex flex-col space-y-4 ">
           <Image src={NoCurrentProjectsImage} alt="No current projects" width={200} height={200} />
           <div className="text-2xl w-64 font-semibold text-blueprint">
-            We're not currently working on anything
+            We&apos;re not currently working on anything
           </div>
         </div>
       ) : (

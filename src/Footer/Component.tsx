@@ -9,9 +9,15 @@ import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 
 export async function Footer() {
-  const footerData: Footer = await getCachedGlobal('footer', 1)()
+  const footerData = await getCachedGlobal('footer', 1)()
+  let navItems = []
+  if ('navItems' in footerData) {
+    navItems = footerData.navItems ? footerData.navItems : []
+  } else {
+    return null
+  }
 
-  const navItems = footerData?.navItems || []
+  // const navItems = footerData?.navItems || []
 
   return (
     <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
