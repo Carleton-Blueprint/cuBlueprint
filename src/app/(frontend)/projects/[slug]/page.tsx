@@ -1,5 +1,5 @@
 import BlockContainer from '@/components/BlockContainer'
-import usePayload from '@/hooks/usePayload'
+import accessPayload from '@/hooks/usePayload'
 import Image from 'next/image'
 import RichText from '@/components/RichText'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import Section from '../../students/_components/Section'
 import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
-  const { payload } = await usePayload()
+  const { payload } = await accessPayload()
   const projects = await payload.find({
     collection: 'projects',
     limit: 1000,
@@ -31,7 +31,7 @@ export async function generateStaticParams() {
 }
 
 export default async function FullProjectPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { payload } = await usePayload()
+  const { payload } = await accessPayload()
   const { slug } = await params
   const res = await payload.find({
     collection: 'projects',

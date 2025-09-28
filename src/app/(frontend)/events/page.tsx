@@ -1,11 +1,11 @@
 import EventCard from './_components/EventCard'
 import BlockContainer from '@/components/BlockContainer'
 import { BentoGrid, BentoGridItem } from '@/components/ui/bento-grid'
-import usePayload from '@/hooks/usePayload'
+import accessPayload from '@/hooks/usePayload'
 import Image from 'next/image'
 
 export default async function EventsPage() {
-  const { payload } = await usePayload()
+  const { payload } = await accessPayload()
   const resGlobal = await payload.findGlobal({
     slug: 'eventsPage',
   })

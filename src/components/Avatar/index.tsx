@@ -1,6 +1,6 @@
 'use client'
 import Image, { StaticImageData } from 'next/image'
-import bunny from '/public/media/bunny.svg'
+import bunny from '@/assets/bunny.svg'
 import { useAuth } from '@payloadcms/ui'
 import { User } from '@/payload-types'
 // import usePayload from '@/hooks/usePayload'

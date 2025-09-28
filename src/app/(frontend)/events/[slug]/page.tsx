@@ -1,4 +1,4 @@
-import usePayload from '@/hooks/usePayload'
+import accessPayload from '@/hooks/usePayload'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
@@ -11,7 +11,7 @@ import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
 import BlockContainer from '@/components/BlockContainer'
 
 export default async function FullEventPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { payload } = await usePayload()
+  const { payload } = await accessPayload()
   const { slug } = await params
   const res = await payload.find({
     collection: 'events',

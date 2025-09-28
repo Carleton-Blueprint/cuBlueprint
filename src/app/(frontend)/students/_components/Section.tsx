@@ -1,4 +1,4 @@
-import { Student, Team } from '@/payload-types'
+import { Student } from '@/payload-types'
 import TeamProfile from './TeamProfile'
 import BlockContainer from '@/components/BlockContainer'
 import { cn } from '@/utilities/ui'
