@@ -17,13 +17,15 @@ export default function EventCard({ data }: { data: Event }) {
     <div className="group">
       <Link href={path} className="relative">
         <Card className="border-none relative h-[18rem] min-w-fit overflow-hidden rounded-[50px] shadow-[0px_4px_4px_0_rgba(0,0,0,0.3)] md:h-[36rem]">
-          <Image
-            src={typeof data.image === 'string' ? data.image : data.image?.url || '/default.png'}
-            alt={'image for ' + title}
-            width={688}
-            height={600}
-            className="absolute h-full w-full object-cover"
-          />
+          {data.image && typeof data.image !== 'string' && data.image.url && (
+            <Image
+              src={data.image.url}
+              alt={'image for ' + title}
+              width={688}
+              height={600}
+              className="absolute h-full w-full object-cover"
+            />
+          )}
           <CardContent className="absolute h-full w-full rounded-[50px] bg-gradient-to-t from-blueprint/70 from-25% to-blueprint/15 to-65%">
             <span className="group:transition absolute bottom-0 left-0 translate-y-14 px-6 pb-8 text-white duration-300 ease-in-out group-hover:translate-y-0">
               <h2 className="text-3xl font-semibold">{title}</h2>
