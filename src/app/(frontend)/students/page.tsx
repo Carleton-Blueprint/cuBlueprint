@@ -47,6 +47,8 @@ export default async function Students() {
           <div className="m-4 ml-0 flex flex-row gap-5 md:m-8 md:justify-start">
             <h1 className="mb-4 pt-6 text-4xl font-bold md:mb-8 md:text-5xl">
               Meet our <span className="text-blueprint-500">Team</span>
+              <br />
+              {process.env.NEXT_PUBLIC_SERVER_URL}
             </h1>
             <Image
               src={bluePeople}
