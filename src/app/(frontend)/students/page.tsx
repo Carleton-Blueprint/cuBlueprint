@@ -13,6 +13,8 @@ export default async function Students() {
     depth: 3,
   })
 
+  console.log('Our NEXT_PUBLIC_SERVER_URL is:', process.env.NEXT_PUBLIC_SERVER_URL)
+
   // process the data to get team name and members/roles
   const teams =
     resGlobal?.teams?.flatMap((team) => {
