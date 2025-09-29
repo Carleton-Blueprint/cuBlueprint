@@ -535,6 +535,7 @@ export interface Post {
 export interface User {
   id: string;
   name?: string | null;
+  avatar?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -811,7 +812,7 @@ export interface Student {
   name: string;
   email: string;
   status: 'current' | 'past';
-  url: string;
+  url?: string | null;
   image?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
@@ -1520,6 +1521,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  avatar?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -2218,6 +2220,21 @@ export interface EventsPage {
  */
 export interface StudentsPage {
   id: string;
+  hero: {
+    title: string;
+    team?: (string | null) | Team;
+    numbersVisibility: boolean;
+    /**
+     * Add numbers to be displayed in the numbers block.
+     */
+    numbers?:
+      | {
+          value: number;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   teams?:
     | {
         /**
@@ -2450,6 +2467,20 @@ export interface EventsPageSelect<T extends boolean = true> {
  * via the `definition` "studentsPage_select".
  */
 export interface StudentsPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        team?: T;
+        numbersVisibility?: T;
+        numbers?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
   teams?:
     | T
     | {

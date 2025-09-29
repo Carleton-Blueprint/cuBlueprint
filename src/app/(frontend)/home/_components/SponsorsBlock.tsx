@@ -36,7 +36,7 @@ export default function SponsorsBlock({
       title={title}
       padding="less"
       inner
-      image={typeof image === 'string' ? image : image?.url || ''}
+      image={image ? image : undefined}
       margin="bottom"
       roundedCorners={
         roundedCorners === 'all'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { cn } from '@/utilities/ui'
 import { Media } from '@/payload-types'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 
 type Props = {
   className?: BlockContainerProps
@@ -16,7 +16,7 @@ type Props = {
   padding?: 'less' | 'more' | boolean
   gap?: 'less' | boolean
   titleSize?: 'sm'
-  image?: string | Media
+  image?: string | Media | StaticImageData
   containChildren?: boolean
 }
 
@@ -38,25 +38,36 @@ export default function BlockContainer({
   image,
   containChildren = true,
 }: Props) {
+  let imageUrl = ''
+  if (typeof image !== 'string') {
+    if (image && 'url' in image && image.url) {
+      imageUrl = image.url
+    } else if (image && 'src' in image) {
+      imageUrl = image.src
+    }
+  }
   return (
     <div
-      className={cn(className, {
-        'py-16': padding,
-        'py-8': padding === 'less',
-        'bg-[#E7F2FD]': bg === 'light-blue',
-        'bg-white': bg === 'white',
-        'bg-[#0A1E3A]': bg === 'dark-blue',
-        'bg-blueprint': bg === 'blueprint',
-        'bg-[#041122]': bg === 'darker-blue',
-        'rounded-[50px]': roundedCorners === true,
-        'rounded-t-[50px]': roundedCorners === 'top',
-        'rounded-b-[50px]': roundedCorners === 'bottom',
-        'self-center md:w-max md:px-12': inner,
-        'my-12': margin === true,
-        'mt-12': margin === 'top',
-        'mb-12': margin === 'bottom',
-        'shadow-[2px_6px_4px_0_rgba(0,0,0,0.3)]': shadow,
-      })}
+      className={cn(
+        {
+          'py-16': padding,
+          'py-8': padding === 'less',
+          'bg-[#E7F2FD]': bg === 'light-blue',
+          'bg-white': bg === 'white',
+          'bg-[#0A1E3A]': bg === 'dark-blue',
+          'bg-blueprint': bg === 'blueprint',
+          'bg-[#041122]': bg === 'darker-blue',
+          'rounded-[50px]': roundedCorners === true,
+          'rounded-t-[50px]': roundedCorners === 'top',
+          'rounded-b-[50px]': roundedCorners === 'bottom',
+          'self-center md:w-max md:px-12': inner,
+          'my-12': margin === true,
+          'mt-12': margin === 'top',
+          'mb-12': margin === 'bottom',
+          'shadow-[2px_6px_4px_0_rgba(0,0,0,0.3)]': shadow,
+        },
+        className,
+      )}
     >
       <div
         className={cn('container space-y-10', {
@@ -81,7 +92,7 @@ export default function BlockContainer({
             {image && (
               <div className="relative">
                 <Image
-                  src={typeof image === 'string' ? image : image.url ? image.url : ''}
+                  src={imageUrl}
                   width={128}
                   height={128}
                   alt="Blueprint Logo"
