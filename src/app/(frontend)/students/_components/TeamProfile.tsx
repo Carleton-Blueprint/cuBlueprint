@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Student } from '@/payload-types'
 import { cn } from '@/utilities/ui'
+import bunny from '@/assets/bunny.svg'
 
 function TeamProfileBase({
   student,
@@ -33,11 +34,7 @@ function TeamProfileBase({
         )}
       >
         <Image
-          src={
-            typeof student.image === 'string'
-              ? student.image
-              : student.image?.url || '/media/bunny.svg'
-          }
+          src={(student.image && typeof student.image != 'string' && student.image.url) || bunny}
           width={128}
           height={128}
           alt={'Picture of ' + (hover ? student.name : 'blueprint logo')}
