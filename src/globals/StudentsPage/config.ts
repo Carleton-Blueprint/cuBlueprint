@@ -7,6 +7,62 @@ export const StudentsPage: GlobalConfig = {
   },
   fields: [
     {
+      name: 'hero',
+      type: 'group',
+      label: 'Hero Section',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Title',
+          required: true,
+        },
+        {
+          name: 'team',
+          type: 'relationship',
+          relationTo: 'teams',
+        },
+        {
+          type: 'collapsible',
+          label: 'Numbers Block',
+          fields: [
+            {
+              name: 'numbersVisibility',
+              type: 'checkbox',
+              label: 'Visibility',
+              required: true,
+            },
+            {
+              name: 'numbers',
+              type: 'array',
+              label: 'Numbers',
+              required: true,
+              maxRows: 4,
+              minRows: 1,
+              admin: {
+                description: 'Add numbers to be displayed in the numbers block.',
+                condition: (siblingData) => siblingData.hero.numbersVisibility,
+              },
+              fields: [
+                {
+                  name: 'value',
+                  type: 'number',
+                  label: 'Value',
+                  required: true,
+                },
+                {
+                  name: 'label',
+                  type: 'text',
+                  label: 'Label',
+                  required: true,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'teams',
       type: 'array',
       label: 'Teams',
