@@ -32,6 +32,9 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   redirects,
+  env: {
+    NEXT_PUBLIC_SERVER_URL: process.env.DEPLOY_PRIME_URL,
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })
