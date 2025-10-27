@@ -3,9 +3,9 @@ import canUseDOM from './canUseDOM'
 export const getServerSideURL = () => {
   let url = process.env.NEXT_PUBLIC_SERVER_URL
 
-  if (url === '$DEPLOY_PRIME_URL' && process.env.DEPLOY_PRIME_URL) {
-    url = process.env.DEPLOY_PRIME_URL
-  }
+  // if (url === '$DEPLOY_PRIME_URL' && process.env.DEPLOY_PRIME_URL) {
+  //   url = process.env.DEPLOY_PRIME_URL
+  // }
 
   if (!url && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
