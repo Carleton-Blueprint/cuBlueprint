@@ -700,7 +700,8 @@ export interface Form {
   /**
    * Choose whether to display an on-page message or redirect to a different page after they submit the form.
    */
-  confirmationType?: ('message' | 'redirect') | null;
+  confirmationType?: ('message' | 'redirect' | 'toast') | null;
+  toastMessage?: string | null;
   confirmationMessage?: {
     root: {
       type: string;
@@ -1779,6 +1780,7 @@ export interface FormsSelect<T extends boolean = true> {
       };
   submitButtonLabel?: T;
   confirmationType?: T;
+  toastMessage?: T;
   confirmationMessage?: T;
   redirect?:
     | T

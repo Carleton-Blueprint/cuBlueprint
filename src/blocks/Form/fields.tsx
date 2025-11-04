@@ -8,6 +8,9 @@ import { State } from './State'
 import { Text } from './Text'
 import { Textarea } from './Textarea'
 
+import { CustomText } from './CustomText'
+import { CustomEmail } from './CustomEmail'
+
 export const fields = {
   checkbox: Checkbox,
   country: Country,
@@ -17,5 +20,17 @@ export const fields = {
   select: Select,
   state: State,
   text: Text,
+  textarea: Textarea,
+}
+
+export const customFields = {
+  checkbox: Checkbox,
+  country: Country,
+  email: CustomEmail,
+  message: Message,
+  number: Number,
+  select: Select,
+  state: State,
+  text: CustomText,
   textarea: Textarea,
 }
