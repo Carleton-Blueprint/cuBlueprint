@@ -8,7 +8,7 @@ import React from 'react'
 import { Error } from '../Error'
 import { Width } from '../Width'
 
-export const Textarea: React.FC<
+export const CustomTextarea: React.FC<
   TextField & {
     errors: Partial<FieldErrorsImpl>
     register: UseFormRegister<FieldValues>
@@ -32,7 +32,7 @@ export const Textarea: React.FC<
         id={name}
         rows={rows}
         {...register(name, { required: required })}
-        className="max-h-40"
+        className="border-2 max-h-96"
       />
 
       {errors[name] && <Error name={name} />}

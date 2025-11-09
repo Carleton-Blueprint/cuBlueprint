@@ -155,7 +155,7 @@ export default function Form({ form }: { form?: FormWithToast }) {
             form={form.id}
             type="submit"
             variant="outline"
-            className="w-full hover:bg-blueprint-300 active:bg-blueprint-400"
+            className="w-full hover:bg-blueprint-300 active:bg-blueprint-400 border-2"
             disabled={isLoading}
           >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

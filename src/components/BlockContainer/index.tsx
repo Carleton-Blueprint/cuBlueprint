@@ -18,6 +18,7 @@ type Props = {
   titleSize?: 'sm' | 'md'
   image?: string | Media | StaticImageData
   containChildren?: boolean
+  imagePositioningClassName?: string
 }
 
 type BlockContainerProps = React.HTMLAttributes<HTMLDivElement> & string
@@ -37,6 +38,7 @@ export default function BlockContainer({
   titleSize,
   image,
   containChildren = true,
+  imagePositioningClassName,
 }: Props) {
   let imageUrl = ''
   if (typeof image !== 'string') {
@@ -97,7 +99,10 @@ export default function BlockContainer({
                   width={128}
                   height={128}
                   alt="Blueprint Logo"
-                  className="absolute -bottom-1/2 left-0 pointer-events-none"
+                  className={cn(
+                    'absolute -bottom-1/2 left-0 pointer-events-none',
+                    imagePositioningClassName,
+                  )}
                 />
                 <span className="invisible">img</span>
               </div>
