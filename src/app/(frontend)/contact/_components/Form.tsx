@@ -4,7 +4,7 @@ import accessPayload from '@/hooks/usePayload'
 // import { useToast } from '@/components/ui/use-toast';
 import { FormProvider, useForm } from 'react-hook-form'
 // import ReCAPTCHA from 'react-google-recaptcha';
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getClientSideURL } from '@/utilities/getURL'
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import { customFields } from '@/blocks/Form/fields'
 import RichText from '@/components/RichText'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
+import { ErrorToast, SuccessToast } from '@/components/Toast'
 
 interface FormWithToast extends Omit<FormType, 'confirmationType'> {
   confirmationType: 'message' | 'redirect' | 'toast'
@@ -42,6 +43,7 @@ export default function Form({ form }: { form?: FormWithToast }) {
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const router = useRouter()
+  const formRef = useRef<HTMLFormElement | null>(null)
 
   const onSubmit = useCallback(
     (data: FormFieldBlock[]) => {
@@ -84,6 +86,10 @@ export default function Form({ form }: { form?: FormWithToast }) {
               message: res.errors?.[0]?.message || 'Internal Server Error',
               status: res.status,
             })
+            ErrorToast(
+              res.status ? res.status + ' Error' : 'Error',
+              res.errors?.[0]?.message || "We couldn't send your message. Please try again later.",
+            )
 
             return
           }
@@ -99,8 +105,8 @@ export default function Form({ form }: { form?: FormWithToast }) {
 
             if (redirectUrl) router.push(redirectUrl)
           } else if (form.confirmationType === 'toast' && form.toastMessage) {
-            console.log('showing toast')
-            toast.success(form.toastMessage)
+            formRef.current?.reset()
+            SuccessToast('Sent!', form.toastMessage)
           }
         } catch (err) {
           console.warn(err)
@@ -108,6 +114,7 @@ export default function Form({ form }: { form?: FormWithToast }) {
           setError({
             message: 'Something went wrong.',
           })
+          ErrorToast('Error', "We couldn't send your message. Please try again later.")
         }
       }
 
@@ -124,8 +131,8 @@ export default function Form({ form }: { form?: FormWithToast }) {
         )} */}
 
         {/* {isLoading && !hasSubmitted && <p>Loading, please wait...</p>} */}
-        {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
-        <form id={form.id} onSubmit={handleSubmit(onSubmit)}>
+        {/* {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>} */}
+        <form id={form.id} onSubmit={handleSubmit(onSubmit)} ref={formRef}>
           <div className="mb-4 last:mb-0">
             {form &&
               form.fields &&

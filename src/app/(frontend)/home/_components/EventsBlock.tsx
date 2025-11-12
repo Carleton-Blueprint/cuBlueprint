@@ -29,9 +29,6 @@ export default function HomeEvents({ visibility, title, image, data }: HomeEvent
     ({ event }) => (typeof event.value === 'string' ? [] : event.value), // Skip if event is of type string
   )
 
-  // const events = res.docs
-  // const news: any[] = []
-
   return (
     <BlockContainer title={title} bg="light-blue" padding="less" image={image ? image : undefined}>
       <div className="-mx-6 flex justify-center px-4">

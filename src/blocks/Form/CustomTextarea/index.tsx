@@ -17,7 +17,7 @@ export const CustomTextarea: React.FC<
 > = ({ name, defaultValue, errors, label, register, required, rows = 3, width }) => {
   return (
     <Width width={width}>
-      <Label htmlFor={name}>
+      <Label htmlFor={name} className="text-lg">
         {label}
 
         {required && (
@@ -32,7 +32,7 @@ export const CustomTextarea: React.FC<
         id={name}
         rows={rows}
         {...register(name, { required: required })}
-        className="border-2 max-h-96"
+        className="border-2 max-h-96 focus-visible:ring-1 focus-visible:border-0"
       />
 
       {errors[name] && <Error name={name} />}

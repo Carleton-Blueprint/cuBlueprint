@@ -18,7 +18,7 @@ export const CustomText: React.FC<
 > = ({ name, defaultValue, errors, label, register, required, width, className, ...props }) => {
   return (
     <Width width={width}>
-      <Label htmlFor={name}>
+      <Label htmlFor={name} className="text-lg">
         {label}
 
         {required && (
