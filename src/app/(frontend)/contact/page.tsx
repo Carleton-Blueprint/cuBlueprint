@@ -22,7 +22,7 @@ export default async function Page() {
       },
     },
   })
-  const form = res?.docs?.[0] as FormType | undefined
+  const form = res?.docs?.[0] as FormType
   return (
     <div className="min-h-[calc(100vh-80px)] bg-blueprint">
       <BlockContainer

@@ -2,11 +2,9 @@ import { toast } from 'sonner'
 import Fail from './_assets/fail-sign.svg'
 import Success from './_assets/pass-sign.svg'
 import Warning from './_assets/warning-sign.svg'
-import Rectangle from './_assets/rectangular-prism.svg'
 import Image from 'next/image'
 import { X } from 'lucide-react'
 import { Button } from '../ui/button'
-import { FaSpinner } from 'react-icons/fa'
 import { FaGear } from 'react-icons/fa6'
 
 export function SuccessToast(title?: string, message?: string) {

@@ -1,6 +1,5 @@
 'use client'
 import { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
-import accessPayload from '@/hooks/usePayload'
 // import { useToast } from '@/components/ui/use-toast';
 import { FormProvider, useForm } from 'react-hook-form'
 // import ReCAPTCHA from 'react-google-recaptcha';
@@ -9,8 +8,6 @@ import { useRouter } from 'next/navigation'
 import { getClientSideURL } from '@/utilities/getURL'
 import { Button } from '@/components/ui/button'
 import { customFields } from '@/blocks/Form/fields'
-import RichText from '@/components/RichText'
-import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { ErrorToast, SuccessToast } from '@/components/Toast'
 
@@ -19,14 +16,14 @@ interface FormWithToast extends Omit<FormType, 'confirmationType'> {
   toastMessage?: string
 }
 
-export default function Form({ form }: { form?: FormWithToast }) {
+export default function Form({ form }: { form: FormWithToast }) {
   // const [email, setEmail] = useState('')
   // const [name, setName] = useState('')
   // const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-  if (!form) {
-    return <div>Form not found</div>
-  }
+  // if (!form) {
+  //   return <div>Form not found</div>
+  // }
 
   const formMethods = useForm({
     defaultValues: form.fields,
@@ -40,8 +37,8 @@ export default function Form({ form }: { form?: FormWithToast }) {
   } = formMethods
 
   const [isLoading, setIsLoading] = useState(false)
-  const [hasSubmitted, setHasSubmitted] = useState<boolean>()
-  const [error, setError] = useState<{ message: string; status?: string } | undefined>()
+  // const [hasSubmitted, setHasSubmitted] = useState<boolean>()
+  // const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const router = useRouter()
   const formRef = useRef<HTMLFormElement | null>(null)
 
@@ -51,7 +48,7 @@ export default function Form({ form }: { form?: FormWithToast }) {
       let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
         console.log('submitForm data', data)
-        setError(undefined)
+        // setError(undefined)
 
         const dataToSend = Object.entries(data).map(([name, value]) => ({
           field: name,
@@ -82,10 +79,10 @@ export default function Form({ form }: { form?: FormWithToast }) {
           if (req.status >= 400) {
             setIsLoading(false)
 
-            setError({
-              message: res.errors?.[0]?.message || 'Internal Server Error',
-              status: res.status,
-            })
+            // setError({
+            //   message: res.errors?.[0]?.message || 'Internal Server Error',
+            //   status: res.status,
+            // })
             ErrorToast(
               res.status ? res.status + ' Error' : 'Error',
               res.errors?.[0]?.message || "We couldn't send your message. Please try again later.",
@@ -95,7 +92,7 @@ export default function Form({ form }: { form?: FormWithToast }) {
           }
 
           setIsLoading(false)
-          setHasSubmitted(true)
+          // setHasSubmitted(true)
           console.log('onSubmit form.confirmationType', form.confirmationType)
 
           if (form.confirmationType === 'redirect' && form.redirect) {
@@ -111,16 +108,16 @@ export default function Form({ form }: { form?: FormWithToast }) {
         } catch (err) {
           console.warn(err)
           setIsLoading(false)
-          setError({
-            message: 'Something went wrong.',
-          })
+          // setError({
+          //   message: 'Something went wrong.',
+          // })
           ErrorToast('Error', "We couldn't send your message. Please try again later.")
         }
       }
 
       void submitForm()
     },
-    [router, form.id, form.redirect, form.confirmationType],
+    [router, form.id, form.redirect, form.confirmationType, form.toastMessage],
   )
 
   return (

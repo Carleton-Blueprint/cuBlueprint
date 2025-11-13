@@ -15,7 +15,7 @@ export const CustomText: React.FC<
       errors: Partial<FieldErrorsImpl>
       register: UseFormRegister<FieldValues>
     }
-> = ({ name, defaultValue, errors, label, register, required, width, className, ...props }) => {
+> = ({ name, defaultValue, errors, label, register, required, width, className }) => {
   return (
     <Width width={width}>
       <Label htmlFor={name} className="text-lg">
