@@ -10,10 +10,13 @@ import accessPayload from '@/hooks/usePayload'
 import type { Form as FormType } from '@payloadcms/plugin-form-builder/types'
 import { Marquee } from '@/components/ui/marquee'
 import { FaLinkedin } from 'react-icons/fa6'
-import SpeechHappy from './_assets/speech-happy.svg'
+import RichText from '@/components/RichText'
 
 export default async function Page() {
   const { payload } = await accessPayload()
+  const resGlobal = await payload.findGlobal({
+    slug: 'contactPage',
+  })
   const res = await payload.find({
     collection: 'forms',
     where: {
@@ -23,71 +26,90 @@ export default async function Page() {
     },
   })
   const form = res?.docs?.[0] as FormType
+  const socialsBlock = resGlobal?.socialsBlock
+  const title = socialsBlock.title
+  const image = socialsBlock.image
+  const instagram = socialsBlock.instagram
+  const linkedin = socialsBlock.linkedin
+  const discord = socialsBlock.discord
+  const detailsBlock = resGlobal?.detailsBlock
+  const heading = detailsBlock?.heading
+  const content = detailsBlock?.content
+
   return (
     <div className="min-h-[calc(100vh-80px)] bg-blueprint">
       <BlockContainer
         roundedCorners="bottom"
         bg="light-blue"
         padding="less"
-        title="Come join the conversation!"
+        title={title}
         titleSize="md"
-        image={SpeechHappy}
+        image={image ? image : undefined}
         imagePositioningClassName="bottom-4 -left-4"
       >
-        {/* <div className="flex gap-2"> */}
         <Marquee pauseOnHover={true} className="[--duration:30s] h-[9.5rem]">
-          {/* <Image src={SpeechHappy} alt="Happy speech bubble" className="size-32" /> */}
-          <HumbleBlueprinter />
-          <Link
-            href="https://discord.com/invite/7gkkW5nJPW"
-            className="bg-blueprint flex gap-3 items-center h-fit group/link w-fit px-6 py-2 rounded-lg shadow-lg hover:shadow-2xl duration-200 ease-in-out"
-          >
-            <FaDiscord className="size-16 group-hover/link:scale-110 transition-transform duration-150 text-blueprint-50" />
-            <div className="flex gap-4 items-center">
-              <h2 className="text-4xl font-bold text-blueprint-50 group-hover/link:underline">
-                Join our Discord
-              </h2>
-              {/* <Image src={SpeechHappy} alt="Happy speech bubble" className="size-32" /> */}
-            </div>
-          </Link>
-          <HoldingHandBlueprinters />
-          <Link
-            href="https://instagram.com/cublueprint"
-            className="bg-blueprint flex gap-3 items-center group/link h-fit w-fit px-6 py-2 rounded-lg shadow-lg hover:shadow-2xl duration-200 ease-in-out"
-          >
-            <FaInstagram className="size-16 group-hover/link:scale-110 transition-transform duration-150 text-blueprint-50" />
-            <div className="flex gap-4 items-center">
-              <h2 className="text-4xl font-bold text-blueprint-50 group-hover/link:underline">
-                Follow us on Instagram
-              </h2>
-            </div>
-          </Link>
-          <FlyingBlueprinter />
-          <Link
-            href="https://www.linkedin.com/company/cublueprint"
-            className="bg-blueprint flex gap-3 items-center group/link h-fit w-fit px-6 py-2 rounded-lg shadow-lg hover:shadow-2xl duration-200 ease-in-out"
-          >
-            <FaLinkedin className="size-16 group-hover/link:scale-110 transition-transform duration-150 text-blueprint-50" />
-            <div className="flex gap-4 items-center">
-              <h2 className="text-4xl font-bold text-blueprint-50 group-hover/link:underline">
-                Follow us on LinkedIn
-              </h2>
-              {/* <Image src={SpeechHappy} alt="Happy speech bubble" className="size-32" /> */}
-            </div>
-          </Link>
+          {discord && (
+            <>
+              <HumbleBlueprinter />
+              <Link
+                href={discord.url}
+                className="bg-blueprint flex gap-3 items-center h-fit group/link w-fit px-6 py-2 rounded-lg shadow-lg hover:shadow-2xl duration-200 ease-in-out"
+              >
+                <FaDiscord className="size-16 group-hover/link:scale-110 transition-transform duration-150 text-blueprint-50" />
+                <div className="flex gap-4 items-center">
+                  <h2 className="text-4xl font-bold text-blueprint-50 group-hover/link:underline">
+                    {discord.label ? discord.label : 'Discord'}
+                  </h2>
+                </div>
+              </Link>
+            </>
+          )}
+          {instagram && (
+            <>
+              <HoldingHandBlueprinters />
+              <Link
+                href={instagram.url}
+                className="bg-blueprint flex gap-3 items-center group/link h-fit w-fit px-6 py-2 rounded-lg shadow-lg hover:shadow-2xl duration-200 ease-in-out"
+              >
+                <FaInstagram className="size-16 group-hover/link:scale-110 transition-transform duration-150 text-blueprint-50" />
+                <div className="flex gap-4 items-center">
+                  <h2 className="text-4xl font-bold text-blueprint-50 group-hover/link:underline">
+                    {instagram.label ? instagram.label : 'Instagram'}
+                  </h2>
+                </div>
+              </Link>
+            </>
+          )}
+          {linkedin && (
+            <>
+              <FlyingBlueprinter />
+              <Link
+                href={linkedin.url}
+                className="bg-blueprint flex gap-3 items-center group/link h-fit w-fit px-6 py-2 rounded-lg shadow-lg hover:shadow-2xl duration-200 ease-in-out"
+              >
+                <FaLinkedin className="size-16 group-hover/link:scale-110 transition-transform duration-150 text-blueprint-50" />
+                <div className="flex gap-4 items-center">
+                  <h2 className="text-4xl font-bold text-blueprint-50 group-hover/link:underline">
+                    {linkedin.label ? linkedin.label : 'LinkedIn'}
+                  </h2>
+                  {/* <Image src={SpeechHappy} alt="Happy speech bubble" className="size-32" /> */}
+                </div>
+              </Link>
+            </>
+          )}
         </Marquee>
         {/* </div> */}
       </BlockContainer>
       <BlockContainer
         bg="blueprint"
         className={'w-full'}
-        title="Get in Touch"
+        title={heading}
         titleSize="md"
         padding="less"
       >
         <div className="flex flex-col gap-10 md:gap-0 md:flex-row w-full justify-between text-blueprint-50">
           <div className="w-full md:w-2/3 -mt-8 md:pr-32">
-            <h2 className=" text-2xl font-semibold">Non Profit Organizations</h2>
+            {/* <h2 className=" text-2xl font-semibold">Non Profit Organizations</h2>
             <p>Please reach out to us for collaboration opportunities.</p>
             <h2 className="mt-4 text-2xl font-semibold">Students</h2>
             <p>
@@ -99,7 +121,12 @@ export default async function Page() {
                 general membership form
               </Link>{' '}
               and join our Discord server.
-            </p>
+            </p> */}
+            <RichText
+              data={content}
+              className="prose-headings:text-blueprint-50 prose-headings:my-2 prose-p:mb-1 prose-p:text-blueprint-50 prose-strong:text-blueprint-50 prose-ul:text-blueprint-50 prose-ol:text-blueprint-50 prose-li:text-blueprint-50"
+              enableGutter={false}
+            />
           </div>
           <div className="w-full md:w-1/3 md:-mt-24">
             <Form form={form} />
