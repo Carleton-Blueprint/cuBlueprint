@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import type { GlobalConfig } from 'payload'
 
 export const ProjectsPage: GlobalConfig = {
@@ -155,4 +156,12 @@ export const ProjectsPage: GlobalConfig = {
       },
     },
   ],
+  hooks: {
+    afterChange: [
+      () => {
+        // Clear the cache for the contact page on update
+        revalidatePath('/projects')
+      },
+    ],
+  },
 }
