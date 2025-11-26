@@ -123,6 +123,7 @@ export interface Config {
     projectsPage: ProjectsPage;
     eventsPage: EventsPage;
     studentsPage: StudentsPage;
+    contactPage: ContactPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
@@ -131,6 +132,7 @@ export interface Config {
     projectsPage: ProjectsPageSelect<false> | ProjectsPageSelect<true>;
     eventsPage: EventsPageSelect<false> | EventsPageSelect<true>;
     studentsPage: StudentsPageSelect<false> | StudentsPageSelect<true>;
+    contactPage: ContactPageSelect<false> | ContactPageSelect<true>;
   };
   locale: null;
   user: User & {
@@ -700,7 +702,8 @@ export interface Form {
   /**
    * Choose whether to display an on-page message or redirect to a different page after they submit the form.
    */
-  confirmationType?: ('message' | 'redirect') | null;
+  confirmationType?: ('message' | 'redirect' | 'toast') | null;
+  toastMessage?: string | null;
   confirmationMessage?: {
     root: {
       type: string;
@@ -1779,6 +1782,7 @@ export interface FormsSelect<T extends boolean = true> {
       };
   submitButtonLabel?: T;
   confirmationType?: T;
+  toastMessage?: T;
   confirmationMessage?: T;
   redirect?:
     | T
@@ -2257,6 +2261,49 @@ export interface StudentsPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactPage".
+ */
+export interface ContactPage {
+  id: string;
+  socialsBlock: {
+    title: string;
+    image?: (string | null) | Media;
+    instagram: {
+      url: string;
+      label?: string | null;
+    };
+    linkedin: {
+      url: string;
+      label?: string | null;
+    };
+    discord: {
+      url: string;
+      label?: string | null;
+    };
+  };
+  detailsBlock: {
+    heading: string;
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2486,6 +2533,45 @@ export interface StudentsPageSelect<T extends boolean = true> {
     | {
         team?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactPage_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  socialsBlock?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        instagram?:
+          | T
+          | {
+              url?: T;
+              label?: T;
+            };
+        linkedin?:
+          | T
+          | {
+              url?: T;
+              label?: T;
+            };
+        discord?:
+          | T
+          | {
+              url?: T;
+              label?: T;
+            };
+      };
+  detailsBlock?:
+    | T
+    | {
+        heading?: T;
+        content?: T;
       };
   updatedAt?: T;
   createdAt?: T;

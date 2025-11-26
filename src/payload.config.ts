@@ -27,6 +27,8 @@ import { HomePage } from './globals/HomePage/config'
 import { ProjectsPage } from './globals/ProjectsPage/config'
 import { StudentsPage } from './globals/StudentsPage/config'
 import { EventsPage } from './globals/EventsPage/config'
+import { resendAdapter } from '@payloadcms/email-resend'
+import { ContactPage } from './globals/ContactPage/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -81,6 +83,11 @@ export default buildConfig({
       ],
     },
   },
+  email: resendAdapter({
+    defaultFromAddress: 'info@cublueprint.org',
+    defaultFromName: 'Carleton Blueprint',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: mongooseAdapter({
@@ -101,7 +108,7 @@ export default buildConfig({
   ],
   serverURL: getServerSideURL(),
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, HomePage, ProjectsPage, EventsPage, StudentsPage],
+  globals: [Header, Footer, HomePage, ProjectsPage, EventsPage, StudentsPage, ContactPage],
   plugins: [
     ...plugins,
     s3Storage({

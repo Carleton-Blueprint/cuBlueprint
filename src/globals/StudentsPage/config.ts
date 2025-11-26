@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import type { GlobalConfig } from 'payload'
 
 export const StudentsPage: GlobalConfig = {
@@ -82,4 +83,12 @@ export const StudentsPage: GlobalConfig = {
       ],
     },
   ],
+  hooks: {
+    afterChange: [
+      () => {
+        // Clear the cache for the students page on update
+        revalidatePath('/students')
+      },
+    ],
+  },
 }

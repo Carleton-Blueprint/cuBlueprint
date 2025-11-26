@@ -61,7 +61,25 @@ export const plugins: Plugin[] = [
     },
     formOverrides: {
       fields: ({ defaultFields }) => {
+        defaultFields.splice(4, 0, {
+          name: 'toastMessage',
+          type: 'text',
+          required: true,
+          admin: {
+            condition: (data) => data.confirmationType === 'toast',
+          },
+        })
         return defaultFields.map((field) => {
+          if ('name' in field && field.name === 'confirmationType') {
+            return {
+              ...field,
+              options: [
+                { label: 'Message', value: 'message' },
+                { label: 'Redirect', value: 'redirect' },
+                { label: 'Toast', value: 'toast' },
+              ],
+            }
+          }
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,

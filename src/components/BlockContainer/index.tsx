@@ -15,9 +15,10 @@ type Props = {
   shadow?: boolean
   padding?: 'less' | 'more' | boolean
   gap?: 'less' | boolean
-  titleSize?: 'sm'
+  titleSize?: 'sm' | 'md'
   image?: string | Media | StaticImageData
   containChildren?: boolean
+  imagePositioningClassName?: string
 }
 
 type BlockContainerProps = React.HTMLAttributes<HTMLDivElement> & string
@@ -37,6 +38,7 @@ export default function BlockContainer({
   titleSize,
   image,
   containChildren = true,
+  imagePositioningClassName,
 }: Props) {
   let imageUrl = ''
   if (typeof image !== 'string') {
@@ -81,9 +83,10 @@ export default function BlockContainer({
               'flex space-x-12 py-2 items-center text-5xl font-bold text-blueprint md:text-6xl',
               {
                 'text-3xl md:text-4xl': titleSize === 'sm',
+                'text-4xl md:text-5xl': titleSize === 'md',
                 'text-center': centered,
-                'text-blueprint-50': bg === 'darker-blue',
-                'text-white': bg === 'dark-blue' || bg === 'blueprint',
+                'text-blueprint-50': bg === 'dark-blue' || bg === 'darker-blue',
+                'text-white': bg === 'blueprint',
                 'mb-5': image,
               },
             )}
@@ -96,7 +99,10 @@ export default function BlockContainer({
                   width={128}
                   height={128}
                   alt="Blueprint Logo"
-                  className="absolute -bottom-1/2 left-0 pointer-events-none"
+                  className={cn(
+                    'absolute -bottom-1/2 left-0 pointer-events-none',
+                    imagePositioningClassName,
+                  )}
                 />
                 <span className="invisible">img</span>
               </div>
