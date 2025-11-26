@@ -58,7 +58,7 @@ export default function AboutUsBlock({
                 className="group hidden w-fit flex-row items-center text-sm font-bold text-blueprint md:flex md:text-2xl"
               >
                 <p>{linkText}</p>
-                <MdDoubleArrow className="ml-2 transition-spacing ease-in-out group-hover:ml-4" />
+                <MdDoubleArrow className="ml-2 transition-spacing ease-in-out duration-300 group-hover:ml-4" />
               </Link>
             )}
           </div>
