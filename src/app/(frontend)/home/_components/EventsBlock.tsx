@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Event, Media } from '@/payload-types'
+import EventsCarousel from './EventsCarousel'
 
 type HomeEventsProps = {
   visibility?: boolean
@@ -30,8 +31,14 @@ export default function HomeEvents({ visibility, title, image, data }: HomeEvent
   )
 
   return (
-    <BlockContainer title={title} bg="light-blue" padding="less" image={image ? image : undefined}>
-      <div className="-mx-6 flex justify-center px-4">
+    <BlockContainer
+      title={title}
+      bg="light-blue"
+      padding="less"
+      image={image ? image : undefined}
+      containChildren={false}
+    >
+      {/* <div className="-mx-6 flex justify-center px-4">
         <Carousel
           opts={{
             align: 'start',
@@ -40,14 +47,7 @@ export default function HomeEvents({ visibility, title, image, data }: HomeEvent
           className="w-full"
         >
           <CarouselContent className="px-1 py-4">
-            {/* {news.map((announcement) => (
-              <CarouselItem
-                key={announcement.announcementPageId}
-                className="md:basis-1/2 lg:basis-1/3"
-              >
-                <EventCard data={announcement} />
-              </CarouselItem>
-            ))} */}
+            
             {events.map((event, index) => (
               <CarouselItem key={event.id + index} className="md:basis-1/2 lg:basis-1/3">
                 <EventCard data={event} />
@@ -57,6 +57,9 @@ export default function HomeEvents({ visibility, title, image, data }: HomeEvent
           <CarouselPrevious className="hidden md:inline-flex" />
           <CarouselNext className="hidden md:inline-flex" />
         </Carousel>
+      </div> */}
+      <div className=" flex w-[calc(100%+2rem)] containerWidth justify-center flex-col md:flex-row">
+        <EventsCarousel featuredEvents={events} />
       </div>
       {/* <div className="flex flex-col md:flex-row pl-8 space-y-8 md:space-y-0 md:space-x-8"></div> */}
     </BlockContainer>
