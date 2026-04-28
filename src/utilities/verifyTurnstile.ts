@@ -36,6 +36,9 @@ export const verifyTurnstileToken = async (
     response: token,
   })
 
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 5000)
+
   try {
     const res = await fetch(turnstileVerifyURL, {
       method: 'POST',
@@ -44,7 +47,9 @@ export const verifyTurnstileToken = async (
       },
       body,
       cache: 'no-store',
+      signal: controller.signal,
     })
+    clearTimeout(timeoutId)
 
     if (!res.ok) {
       return {
@@ -67,6 +72,7 @@ export const verifyTurnstileToken = async (
       message: 'CAPTCHA verified.',
     }
   } catch {
+    clearTimeout(timeoutId)
     return {
       success: false,
       message: 'Turnstile verification service is currently unavailable.',
