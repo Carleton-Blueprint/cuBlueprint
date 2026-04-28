@@ -1,9 +1,21 @@
-"use client"
+'use client'
 import React, { useEffect, useRef, useImperativeHandle } from 'react'
+
+type TurnstileWidgetInstance = {
+  render: (
+    container: HTMLDivElement,
+    options: {
+      sitekey: string
+      callback: (token: string) => void
+      'expired-callback': () => void
+    },
+  ) => number
+  reset: (widgetId: number) => void
+}
 
 declare global {
   interface Window {
-    turnstile?: any
+    turnstile?: TurnstileWidgetInstance
   }
 }
 
@@ -21,7 +33,7 @@ const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
 function loadScript(): Promise<void> {
   return new Promise((resolve) => {
     if (typeof window === 'undefined') return resolve()
-    if ((window as any).turnstile) return resolve()
+    if (window.turnstile) return resolve()
     const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`)
     if (existing) return resolve()
     const s = document.createElement('script')
@@ -43,7 +55,7 @@ const TurnstileWidget = React.forwardRef<TurnstileHandle, Props>(({ siteKey, onC
         if (typeof window !== 'undefined' && window.turnstile && widgetIdRef.current != null) {
           window.turnstile.reset(widgetIdRef.current)
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     },
@@ -56,12 +68,18 @@ const TurnstileWidget = React.forwardRef<TurnstileHandle, Props>(({ siteKey, onC
       if (!mounted) return
       if (!containerRef.current) return
       try {
-        widgetIdRef.current = window.turnstile.render(containerRef.current, {
-          sitekey: siteKey,
-          callback: (token: string) => onChange(token),
-          'expired-callback': () => onChange(null),
-        })
-      } catch (e) {
+        const t = typeof window !== 'undefined' ? window.turnstile : undefined
+        if (t && containerRef.current) {
+          widgetIdRef.current = t.render(containerRef.current, {
+            sitekey: siteKey,
+            callback: (token: string) => onChange(token),
+            'expired-callback': () => onChange(null),
+          })
+        } else {
+          // Turnstile not available yet; we'll skip rendering for now
+          // it should be available after the script loads
+        }
+      } catch {
         // script might not be ready; ignore
       }
     })()
@@ -73,5 +91,7 @@ const TurnstileWidget = React.forwardRef<TurnstileHandle, Props>(({ siteKey, onC
 
   return <div ref={containerRef} />
 })
+
+TurnstileWidget.displayName = 'TurnstileWidget'
 
 export default TurnstileWidget
