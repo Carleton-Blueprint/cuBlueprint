@@ -46,7 +46,7 @@ export const FormBlock: React.FC<
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
-  const recaptchaRef = useRef<TurnstileHandle | null>(null)
+  const turnstileRef = useRef<TurnstileHandle | null>(null)
   const router = useRouter()
 
   const onSubmit = useCallback(
@@ -105,7 +105,7 @@ export const FormBlock: React.FC<
               message: res.errors?.[0]?.message || 'Internal Server Error',
               status: res.status,
             })
-            recaptchaRef.current?.reset()
+            turnstileRef.current?.reset()
             setCaptchaToken(null)
 
             return
@@ -113,7 +113,7 @@ export const FormBlock: React.FC<
 
           setIsLoading(false)
           setHasSubmitted(true)
-          recaptchaRef.current?.reset()
+          turnstileRef.current?.reset()
           setCaptchaToken(null)
 
           if (confirmationType === 'redirect' && redirect) {
@@ -129,7 +129,7 @@ export const FormBlock: React.FC<
           setError({
             message: 'Something went wrong.',
           })
-          recaptchaRef.current?.reset()
+          turnstileRef.current?.reset()
           setCaptchaToken(null)
         }
       }
@@ -180,7 +180,7 @@ export const FormBlock: React.FC<
               {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
                 <div className="mb-6 flex justify-center">
                   <TurnstileWidget
-                    ref={recaptchaRef}
+                    ref={turnstileRef}
                     siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                     onChange={(token) => setCaptchaToken(token)}
                   />

@@ -19,7 +19,7 @@ interface FormWithToast extends Omit<FormType, 'confirmationType'> {
 export default function Form({ form }: { form: FormWithToast }) {
   // const [email, setEmail] = useState('')
   // const [name, setName] = useState('')
-  const recaptchaRef = useRef<TurnstileHandle | null>(null)
+  const turnstileRef = useRef<TurnstileHandle | null>(null)
 
   // if (!form) {
   //   return <div>Form not found</div>
@@ -99,7 +99,7 @@ export default function Form({ form }: { form: FormWithToast }) {
               res.status ? res.status + ' Error' : 'Error',
               res.errors?.[0]?.message || "We couldn't send your message. Please try again later.",
             )
-              recaptchaRef.current?.reset()
+              turnstileRef.current?.reset()
               setCaptchaToken(null)
 
             return
@@ -117,14 +117,14 @@ export default function Form({ form }: { form: FormWithToast }) {
             if (redirectUrl) router.push(redirectUrl)
           } else if (form.confirmationType === 'toast' && form.toastMessage) {
             formRef.current?.reset()
-            recaptchaRef.current?.reset()
+            turnstileRef.current?.reset()
             setCaptchaToken(null)
             SuccessToast('Sent!', form.toastMessage)
           }
         } catch (err) {
           console.warn(err)
           setIsLoading(false)
-          recaptchaRef.current?.reset()
+          turnstileRef.current?.reset()
           setCaptchaToken(null)
           // setError({
           //   message: 'Something went wrong.',
@@ -176,7 +176,7 @@ export default function Form({ form }: { form: FormWithToast }) {
           {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
             <div className="mb-6 flex justify-center">
               <TurnstileWidget
-                ref={recaptchaRef}
+                ref={turnstileRef}
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                 onChange={(token) => setCaptchaToken(token)}
               />
