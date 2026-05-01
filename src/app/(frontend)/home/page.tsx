@@ -64,7 +64,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden relative">
       <HeroBlock {...heroBlockData} />
       <div className="flex flex-col">
         <AboutUsBlock {...aboutUsBlockData} />

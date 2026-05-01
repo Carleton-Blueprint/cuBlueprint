@@ -18,6 +18,7 @@ import Footer from '@/components/Footer'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { Toaster } from '@/components/ui/sonner'
+import CallOut from './home/_components/CallOut'
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
 
@@ -48,6 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Navbar pages={pages} />
           {children}
           <Toaster />
+          <CallOut />
           <Footer pages={pages} />
         </Providers>
       </body>

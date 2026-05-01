@@ -111,6 +111,10 @@ export const Projects: CollectionConfig<'projects'> = {
         },
       ],
     },
+    {
+      name: 'testField',
+      type: 'text',
+    },
   ],
   versions: {
     drafts: {

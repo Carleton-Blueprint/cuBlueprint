@@ -801,6 +801,7 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  testField?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1565,6 +1566,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         role?: T;
         id?: T;
       };
+  testField?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
