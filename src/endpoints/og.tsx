@@ -28,6 +28,10 @@ export const ogEndpoint: Endpoint = {
 
       const fontData = await readFontData()
 
+      if (!fontData) {
+        return Response.json({ error: 'Font not found' }, { status: 404 })
+      }
+
       return new ImageResponse(
         (
           <div
@@ -95,18 +99,14 @@ export const ogEndpoint: Endpoint = {
           </div>
         ),
         {
-          ...(fontData
-            ? {
-                fonts: [
-                  {
-                    data: fontData,
-                    name: 'Arial',
-                    style: 'normal',
-                    weight: 400,
-                  },
-                ],
-              }
-            : {}),
+          fonts: [
+            {
+              data: fontData,
+              name: 'Arial',
+              style: 'normal',
+              weight: 400,
+            },
+          ],
           height: 630,
           width: 1200,
         },
