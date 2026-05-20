@@ -99,8 +99,8 @@ export default function Form({ form }: { form: FormWithToast }) {
               res.status ? res.status + ' Error' : 'Error',
               res.errors?.[0]?.message || "We couldn't send your message. Please try again later.",
             )
-              turnstileRef.current?.reset()
-              setCaptchaToken(null)
+            turnstileRef.current?.reset()
+            setCaptchaToken(null)
 
             return
           }
