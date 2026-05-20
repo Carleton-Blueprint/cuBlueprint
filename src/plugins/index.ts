@@ -76,7 +76,7 @@ export const plugins: Plugin[] = [
             return data
           },
           // Sanitize submission values to strip any HTML/JS before storing
-          async ({ data }) => {
+          async ({ data, req }) => {
             try {
               if (data && Array.isArray(data.submissionData)) {
                 data.submissionData = data.submissionData.map(
@@ -94,7 +94,8 @@ export const plugins: Plugin[] = [
                   },
                 )
               }
-            } catch (_err) {
+            } catch (err) {
+              req.payload.logger.error({ err }, 'Error sanitizing submission data')
               // If sanitization fails, reject the submission
               throw new Error('Failed to sanitize submission data')
             }
