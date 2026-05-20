@@ -2,8 +2,8 @@
 import { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
 // import { useToast } from '@/components/ui/use-toast';
 import { FormProvider, useForm } from 'react-hook-form'
-// import ReCAPTCHA from 'react-google-recaptcha';
 import React, { useCallback, useRef, useState } from 'react'
+import TurnstileWidget, { TurnstileHandle } from '@/components/TurnstileWidget'
 import { useRouter } from 'next/navigation'
 import { getClientSideURL } from '@/utilities/getURL'
 import { Button } from '@/components/ui/button'
@@ -19,7 +19,7 @@ interface FormWithToast extends Omit<FormType, 'confirmationType'> {
 export default function Form({ form }: { form: FormWithToast }) {
   // const [email, setEmail] = useState('')
   // const [name, setName] = useState('')
-  // const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const turnstileRef = useRef<TurnstileHandle | null>(null)
 
   // if (!form) {
   //   return <div>Form not found</div>
@@ -37,6 +37,7 @@ export default function Form({ form }: { form: FormWithToast }) {
   } = formMethods
 
   const [isLoading, setIsLoading] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   // const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   // const [error, setError] = useState<{ message: string; status?: string } | undefined>()
   const router = useRouter()
@@ -44,6 +45,16 @@ export default function Form({ form }: { form: FormWithToast }) {
 
   const onSubmit = useCallback(
     (data: FormFieldBlock[]) => {
+      if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+        ErrorToast('Configuration Error', 'CAPTCHA is not configured. Please contact support.')
+        return
+      }
+
+      if (!captchaToken) {
+        ErrorToast('CAPTCHA Required', 'Please complete the CAPTCHA before submitting.')
+        return
+      }
+
       console.log('onSubmit data', data)
       let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
@@ -68,6 +79,7 @@ export default function Form({ form }: { form: FormWithToast }) {
             }),
             headers: {
               'Content-Type': 'application/json',
+              'x-captcha-token': captchaToken,
             },
             method: 'POST',
           })
@@ -87,6 +99,8 @@ export default function Form({ form }: { form: FormWithToast }) {
               res.status ? res.status + ' Error' : 'Error',
               res.errors?.[0]?.message || "We couldn't send your message. Please try again later.",
             )
+            turnstileRef.current?.reset()
+            setCaptchaToken(null)
 
             return
           }
@@ -103,11 +117,15 @@ export default function Form({ form }: { form: FormWithToast }) {
             if (redirectUrl) router.push(redirectUrl)
           } else if (form.confirmationType === 'toast' && form.toastMessage) {
             formRef.current?.reset()
+            turnstileRef.current?.reset()
+            setCaptchaToken(null)
             SuccessToast('Sent!', form.toastMessage)
           }
         } catch (err) {
           console.warn(err)
           setIsLoading(false)
+          turnstileRef.current?.reset()
+          setCaptchaToken(null)
           // setError({
           //   message: 'Something went wrong.',
           // })
@@ -117,7 +135,7 @@ export default function Form({ form }: { form: FormWithToast }) {
 
       void submitForm()
     },
-    [router, form.id, form.redirect, form.confirmationType, form.toastMessage],
+    [router, form.id, form.redirect, form.confirmationType, form.toastMessage, captchaToken],
   )
 
   return (
@@ -154,6 +172,16 @@ export default function Form({ form }: { form: FormWithToast }) {
                 return null
               })}
           </div>
+
+          {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
+            <div className="mb-6 flex justify-center">
+              <TurnstileWidget
+                ref={turnstileRef}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                onChange={(token) => setCaptchaToken(token)}
+              />
+            </div>
+          ) : null}
 
           <Button
             form={form.id}

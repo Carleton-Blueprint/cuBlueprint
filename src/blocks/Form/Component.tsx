@@ -2,11 +2,12 @@
 import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
 
 import { useRouter } from 'next/navigation'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import TurnstileWidget, { TurnstileHandle } from '@/components/TurnstileWidget'
 
 import { fields } from './fields'
 import { getClientSideURL } from '@/utilities/getURL'
@@ -44,10 +45,28 @@ export const FormBlock: React.FC<
   const [isLoading, setIsLoading] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState<boolean>()
   const [error, setError] = useState<{ message: string; status?: string } | undefined>()
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const turnstileRef = useRef<TurnstileHandle | null>(null)
   const router = useRouter()
 
   const onSubmit = useCallback(
     (data: FormFieldBlock[]) => {
+      if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
+        setError({
+          message: 'CAPTCHA is not configured. Please contact support.',
+          status: '500',
+        })
+        return
+      }
+
+      if (!captchaToken) {
+        setError({
+          message: 'Please complete the CAPTCHA before submitting.',
+          status: '400',
+        })
+        return
+      }
+
       let loadingTimerID: ReturnType<typeof setTimeout>
       const submitForm = async () => {
         setError(undefined)
@@ -70,6 +89,7 @@ export const FormBlock: React.FC<
             }),
             headers: {
               'Content-Type': 'application/json',
+              'x-captcha-token': captchaToken,
             },
             method: 'POST',
           })
@@ -85,12 +105,16 @@ export const FormBlock: React.FC<
               message: res.errors?.[0]?.message || 'Internal Server Error',
               status: res.status,
             })
+            turnstileRef.current?.reset()
+            setCaptchaToken(null)
 
             return
           }
 
           setIsLoading(false)
           setHasSubmitted(true)
+          turnstileRef.current?.reset()
+          setCaptchaToken(null)
 
           if (confirmationType === 'redirect' && redirect) {
             const { url } = redirect
@@ -105,12 +129,14 @@ export const FormBlock: React.FC<
           setError({
             message: 'Something went wrong.',
           })
+          turnstileRef.current?.reset()
+          setCaptchaToken(null)
         }
       }
 
       void submitForm()
     },
-    [router, formID, redirect, confirmationType],
+    [router, formID, redirect, confirmationType, captchaToken],
   )
 
   return (
@@ -150,6 +176,16 @@ export const FormBlock: React.FC<
                     return null
                   })}
               </div>
+
+              {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
+                <div className="mb-6 flex justify-center">
+                  <TurnstileWidget
+                    ref={turnstileRef}
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                    onChange={(token) => setCaptchaToken(token)}
+                  />
+                </div>
+              ) : null}
 
               <Button form={formID} type="submit" variant="default">
                 {submitButtonLabel}

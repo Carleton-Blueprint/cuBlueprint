@@ -10,6 +10,7 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { verifyTurnstileToken } from '@/utilities/verifyTurnstile'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -58,6 +59,23 @@ export const plugins: Plugin[] = [
   formBuilderPlugin({
     fields: {
       payment: false,
+    },
+    formSubmissionOverrides: {
+      hooks: {
+        beforeValidate: [
+          async ({ data, req }) => {
+            const captchaToken = req.headers.get('x-captcha-token') ?? undefined
+
+            const verificationResult = await verifyTurnstileToken(captchaToken)
+
+            if (!verificationResult.success) {
+              throw new Error(verificationResult.message)
+            }
+
+            return data
+          },
+        ],
+      },
     },
     formOverrides: {
       fields: ({ defaultFields }) => {
