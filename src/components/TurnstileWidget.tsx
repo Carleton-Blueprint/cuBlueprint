@@ -34,14 +34,53 @@ function loadScript(): Promise<void> {
   return new Promise((resolve) => {
     if (typeof window === 'undefined') return resolve()
     if (window.turnstile) return resolve()
-    const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`)
-    if (existing) return resolve()
+
+    const resolveWhenReady = (script: HTMLScriptElement) => {
+      if (window.turnstile) {
+        resolve()
+        return
+      }
+
+      const cleanup = () => {
+        clearInterval(intervalId)
+        script.removeEventListener('load', handleReady)
+        script.removeEventListener('error', handleError)
+      }
+
+      const handleReady = () => {
+        if (!window.turnstile) return
+        cleanup()
+        resolve()
+      }
+
+      const handleError = () => {
+        cleanup()
+        resolve()
+      }
+
+      const intervalId = window.setInterval(() => {
+        if (window.turnstile) {
+          cleanup()
+          resolve()
+        }
+      }, 50)
+
+      script.addEventListener('load', handleReady)
+      script.addEventListener('error', handleError)
+    }
+
+    const existing = document.querySelector(`script[src="${SCRIPT_SRC}"]`) as HTMLScriptElement | null
+    if (existing) {
+      resolveWhenReady(existing)
+      return
+    }
+
     const s = document.createElement('script')
     s.src = SCRIPT_SRC
     s.async = true
     s.defer = true
-    s.onload = () => resolve()
     document.head.appendChild(s)
+    resolveWhenReady(s)
   })
 }
 
