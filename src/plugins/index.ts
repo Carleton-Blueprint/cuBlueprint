@@ -11,6 +11,7 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { verifyTurnstileToken } from '@/utilities/verifyTurnstile'
+import sanitizeHtml from 'sanitize-html'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -70,6 +71,33 @@ export const plugins: Plugin[] = [
 
             if (!verificationResult.success) {
               throw new Error(verificationResult.message)
+            }
+
+            return data
+          },
+          // Sanitize submission values to strip any HTML/JS before storing
+          async ({ data, req }) => {
+            try {
+              if (data && Array.isArray(data.submissionData)) {
+                data.submissionData = data.submissionData.map(
+                  (item: { field: string; value: string; id?: string | null }) => {
+                    if (item && typeof item.value === 'string') {
+                      return {
+                        ...item,
+                        value: sanitizeHtml(item.value, {
+                          allowedTags: [],
+                          allowedAttributes: {},
+                        }),
+                      }
+                    }
+                    return item
+                  },
+                )
+              }
+            } catch (err) {
+              req.payload.logger.error({ err }, 'Error sanitizing submission data')
+              // If sanitization fails, reject the submission
+              throw new Error('Failed to sanitize submission data')
             }
 
             return data
