@@ -7,13 +7,14 @@ import { ImageResponse } from 'next/og'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const fontPath = path.join(process.cwd(), 'public', 'fonts', 'Arial.ttf')
+let fontDataPromise: Promise<Buffer | null> | null = null
 
 async function readFontData() {
-  try {
-    return await fs.readFile(fontPath)
-  } catch (_error) {
-    return null
+  if (!fontDataPromise) {
+    fontDataPromise = fs.readFile(fontPath).catch((_error) => null)
   }
+
+  return fontDataPromise
 }
 
 export const ogEndpoint: Endpoint = {
