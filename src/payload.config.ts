@@ -29,6 +29,7 @@ import { StudentsPage } from './globals/StudentsPage/config'
 import { EventsPage } from './globals/EventsPage/config'
 import { resendAdapter } from '@payloadcms/email-resend'
 import { ContactPage } from './globals/ContactPage/config'
+import { ogEndpoint } from './endpoints/og'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -108,6 +109,7 @@ export default buildConfig({
   ],
   serverURL: getServerSideURL(),
   cors: [getServerSideURL()].filter(Boolean),
+  endpoints: [ogEndpoint],
   globals: [Header, Footer, HomePage, ProjectsPage, EventsPage, StudentsPage, ContactPage],
   plugins: [
     ...plugins,
