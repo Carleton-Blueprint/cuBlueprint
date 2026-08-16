@@ -17,6 +17,7 @@ import Footer from '@/components/Footer'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { SITE_DESCRIPTION, SITE_NAME } from '@/utilities/site'
 import { Toaster } from '@/components/ui/sonner'
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
@@ -57,9 +58,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION,
   openGraph: mergeOpenGraph(),
   twitter: {
-    card: 'summary_large_image',
-    creator: '@payloadcms',
+    card: 'summary',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
   },
 }
