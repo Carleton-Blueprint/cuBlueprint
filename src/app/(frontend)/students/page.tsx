@@ -6,7 +6,7 @@ import { getPayload } from 'payload'
 import BlockContainer from '@/components/BlockContainer'
 import { NumberTicker } from '@/components/magicui/number-ticker'
 
-export const revalidate = 3600
+export const revalidate = 1800
 
 export default async function Students() {
   const payload = await getPayload({ config: configPromise })

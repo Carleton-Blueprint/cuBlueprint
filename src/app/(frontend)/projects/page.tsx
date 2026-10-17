@@ -3,7 +3,7 @@ import CurrentProjects from './_components/CurrentProjects'
 import PastProjects from './_components/PastProjects'
 import accessPayload from '@/hooks/usePayload'
 
-export const revalidate = 3600
+export const revalidate = 1800
 
 export default async function Projects() {
   const { payload } = await accessPayload()
