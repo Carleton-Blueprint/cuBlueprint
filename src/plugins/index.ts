@@ -5,6 +5,7 @@ import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { Plugin } from 'payload'
+import { revalidateDeletedForm, revalidateForm } from '@/hooks/revalidateForm'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -107,6 +108,10 @@ export const plugins: Plugin[] = [
       },
     },
     formOverrides: {
+      hooks: {
+        afterChange: [revalidateForm],
+        afterDelete: [revalidateDeletedForm],
+      },
       fields: ({ defaultFields }) => {
         defaultFields.splice(4, 0, {
           name: 'toastMessage',

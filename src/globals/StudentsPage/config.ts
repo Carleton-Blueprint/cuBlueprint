@@ -1,5 +1,15 @@
 import { revalidatePath } from 'next/cache'
-import type { GlobalConfig } from 'payload'
+import type { GlobalAfterChangeHook, GlobalConfig } from 'payload'
+
+import { revalidatePublicSite } from '@/hooks/revalidatePublicSite'
+
+export const revalidateStudentsPage: GlobalAfterChangeHook = ({ doc, req: { context } }) => {
+  if (!context.disableRevalidate) {
+    revalidatePath('/students')
+    revalidatePublicSite(context)
+  }
+  return doc
+}
 
 export const StudentsPage: GlobalConfig = {
   slug: 'studentsPage',
@@ -84,11 +94,6 @@ export const StudentsPage: GlobalConfig = {
     },
   ],
   hooks: {
-    afterChange: [
-      () => {
-        // Clear the cache for the students page on update
-        revalidatePath('/students')
-      },
-    ],
+    afterChange: [revalidateStudentsPage],
   },
 }
