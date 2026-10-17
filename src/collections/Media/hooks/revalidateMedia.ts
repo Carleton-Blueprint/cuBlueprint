@@ -1,28 +1,13 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
-import { revalidatePath } from 'next/cache'
 
-const revalidatePublicPages = () => {
-  revalidatePath('/', 'layout')
-}
+import { revalidatePublicSite } from '@/hooks/revalidatePublicSite'
 
-export const revalidateMedia: CollectionAfterChangeHook = ({
-  doc,
-  req: { context },
-}) => {
-  if (!context.disableRevalidate) {
-    revalidatePublicPages()
-  }
-
+export const revalidateMedia: CollectionAfterChangeHook = ({ doc, req: { context } }) => {
+  revalidatePublicSite(context)
   return doc
 }
 
-export const revalidateDeletedMedia: CollectionAfterDeleteHook = ({
-  doc,
-  req: { context },
-}) => {
-  if (!context.disableRevalidate) {
-    revalidatePublicPages()
-  }
-
+export const revalidateDeletedMedia: CollectionAfterDeleteHook = ({ doc, req: { context } }) => {
+  revalidatePublicSite(context)
   return doc
 }

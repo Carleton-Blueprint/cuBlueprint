@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
+import { revalidateDeletedTeam, revalidateTeam } from './hooks/revalidateTeam'
 
 export const Teams: CollectionConfig<'teams'> = {
   slug: 'teams',
@@ -14,6 +15,10 @@ export const Teams: CollectionConfig<'teams'> = {
     defaultColumns: ['name', 'slug', 'updatedAt'],
     useAsTitle: 'name',
     group: 'People',
+  },
+  hooks: {
+    afterChange: [revalidateTeam],
+    afterDelete: [revalidateDeletedTeam],
   },
   fields: [
     {

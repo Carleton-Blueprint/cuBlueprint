@@ -14,14 +14,14 @@ describe('revalidateMedia', () => {
     revalidatePath.mockClear()
   })
 
-  it('marks all public pages below the root layout after a media update', () => {
+  it('marks all public pages below the root layout after a media update via shared helper', () => {
     revalidateMedia({ req: { context: {} } } as never)
 
     expect(revalidatePath).toHaveBeenCalledTimes(1)
     expect(revalidatePath).toHaveBeenCalledWith('/', 'layout')
   })
 
-  it('marks all public pages below the root layout after media deletion', () => {
+  it('marks all public pages below the root layout after media deletion via shared helper', () => {
     revalidateDeletedMedia({ req: { context: {} } } as never)
 
     expect(revalidatePath).toHaveBeenCalledTimes(1)
