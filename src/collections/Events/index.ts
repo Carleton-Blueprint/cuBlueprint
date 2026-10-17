@@ -10,6 +10,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 import { Banner } from '@/blocks/Banner/config'
 import { CallToAction } from '@/blocks/CallToAction/config'
+import { revalidateDeletedEvent, revalidateEvent } from './hooks/revalidateEvent'
 
 export const Events: CollectionConfig<'events'> = {
   slug: 'events',
@@ -153,6 +154,8 @@ export const Events: CollectionConfig<'events'> = {
     },
   ],
   hooks: {
+    afterChange: [revalidateEvent],
+    afterDelete: [revalidateDeletedEvent],
     beforeChange: [
       ({ data }) => {
         if (data.date) {

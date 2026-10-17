@@ -142,9 +142,11 @@ In addition to draft previews you can also enable live preview to view your end 
 
 ## On-demand Revalidation
 
-We've added hooks to collections and globals so that all of your pages, posts, footer, or header changes will automatically be updated in the frontend via on-demand revalidation supported by Nextjs.
+Public content changes trigger Next.js on-demand revalidation of the site root layout, so visitors see fresh pages without a full rebuild. This covers media, published pages and posts, visible projects and events, students, teams, categories, form definitions, redirects, header, footer, and the public page globals (home, projects, events, students, contact).
 
-> Note: if an image has been changed, for example it's been cropped, you will need to republish the page it's used on in order to be able to revalidate the Nextjs image cache.
+Pages and posts also keep targeted path and sitemap-tag invalidation. Seed and bulk operations can skip refreshes with `context.disableRevalidate`.
+
+Media updates no longer require republishing a page that uses the image.
 
 ## SEO
 

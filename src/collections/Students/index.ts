@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
+import { revalidateDeletedStudent, revalidateStudent } from './hooks/revalidateStudent'
 
 export const Students: CollectionConfig<'students'> = {
   slug: 'students',
@@ -13,6 +14,10 @@ export const Students: CollectionConfig<'students'> = {
     defaultColumns: ['image', 'name', 'email', 'updatedAt'],
     useAsTitle: 'name',
     group: 'People',
+  },
+  hooks: {
+    afterChange: [revalidateStudent],
+    afterDelete: [revalidateDeletedStudent],
   },
   fields: [
     {

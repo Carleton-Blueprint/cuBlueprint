@@ -3,6 +3,10 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  revalidateDeletedProject,
+  revalidateProject,
+} from './hooks/revalidateProject'
 
 export const Projects: CollectionConfig<'projects'> = {
   slug: 'projects',
@@ -16,6 +20,10 @@ export const Projects: CollectionConfig<'projects'> = {
     defaultColumns: ['companyName', 'slug', 'updatedAt'],
     useAsTitle: 'companyName',
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [revalidateProject],
+    afterDelete: [revalidateDeletedProject],
   },
   fields: [
     {
